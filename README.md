@@ -70,7 +70,7 @@ FidoCadJ is a modern, multiplatform electronic design automation (EDA) software 
 
 FidoCadJ comes with a built-in library of components, but the community has created many additional libraries to extend its capabilities! You can download specialized libraries for various purposes:
 
-🔗 **[Browse and Download Community Libraries](https://fidocadj.github.io/FidoCadJ/docs/libraries/)**
+🔗 **[Browse and Download Community Libraries](https://github.com/FidoCadJ/FidoCadJ/tree/gh-pages/libs)**
 
 These community-contributed libraries include:
 - Additional electronic components
@@ -170,7 +170,7 @@ Download the APK file from the [official GitHub releases page](https://github.co
 4. **Design your schematic** using the intuitive interface
 5. **Export** to your desired format (PDF, PNG, SVG, etc.)
 
-💡 **Pro Tip:** Expand your component collection by downloading [community libraries](https://fidocadj.github.io/FidoCadJ/docs/libraries/)!
+💡 **Pro Tip:** Expand your component collection by downloading [community libraries](https://github.com/FidoCadJ/FidoCadJ/tree/gh-pages/libs)!
 
 📖 **Need help?** Check out the [user manual](https://github.com/FidoCadJ/FidoCadJ/releases) (available in multiple languages).
 
