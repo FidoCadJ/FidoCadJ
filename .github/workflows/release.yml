@@ -37,10 +37,8 @@ jobs:
             platform: windows
           - os: ubuntu-latest
             platform: linux
-          - os: macos-13
-            platform: macos-x64
           - os: macos-14
-            platform: macos-arm64
+            platform: macos
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out repository
@@ -102,7 +100,7 @@ jobs:
           python -c "from PIL import Image; im = Image.open('icons/icona_fidocadj_512x512.png'); im.save('icon.ico', sizes=[(16,16),(32,32),(48,48),(64,64),(128,128),(256,256)])"
 
       - name: Build macOS icon
-        if: startsWith(matrix.platform, 'macos')
+        if: matrix.platform == 'macos'
         shell: bash
         run: |
           mkdir icon.iconset
@@ -147,7 +145,7 @@ jobs:
             --description "A multiplatform vector drawing software"
 
       - name: Package portable app (macOS)
-        if: startsWith(matrix.platform, 'macos')
+        if: matrix.platform == 'macos'
         shell: bash
         run: |
           jpackage --type app-image \
@@ -163,7 +161,7 @@ jobs:
             --description "A multiplatform vector drawing software"
 
       - name: Check macOS app bundle
-        if: startsWith(matrix.platform, 'macos')
+        if: matrix.platform == 'macos'
         shell: bash
         run: |
           test -x "dist/FidoCadJ.app/Contents/MacOS/FidoCadJ"
@@ -182,7 +180,7 @@ jobs:
           tar czf "FidoCadJ-${{ steps.ver.outputs.version }}-linux-portable.tar.gz" -C dist FidoCadJ
 
       - name: Archive portable package (macOS)
-        if: startsWith(matrix.platform, 'macos')
+        if: matrix.platform == 'macos'
         shell: bash
         run: |
           ditto -c -k --sequesterRsrc --keepParent \
