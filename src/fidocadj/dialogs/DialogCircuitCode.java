@@ -7,6 +7,7 @@ import java.awt.event.*;
 import fidocadj.globals.Globals;
 import fidocadj.dialogs.controls.DialogUtil;
 import fidocadj.dialogs.controls.TextPopupMenu;
+import fidocadj.clipboard.TextTransfer;
 
 /** DialogCircuitCode.java
 
@@ -145,11 +146,17 @@ public final class DialogCircuitCode extends JDialog
 
         contentPane.add(scrollPane, constraints);
 
+        JButton copy=new JButton(Globals.messages.getString("Copy"));
+        copy.setIcon(Globals.loadIcon("/icons/menu_icons/copy.png"));
+
         JButton ok=new JButton(Globals.messages.getString("Ok_btn"));
         JButton cancel=new JButton(Globals.messages.getString("Cancel_btn"));
 
-        // Put the OK and Cancel buttons and make them active.
+        // Put the Copy button on the left and the OK/Cancel buttons on
+        // the right, and make them active.
         Box b=Box.createHorizontalBox();
+        b.add(Box.createHorizontalStrut(20));
+        b.add(copy);
         b.add(Box.createHorizontalGlue());
         ok.setPreferredSize(cancel.getPreferredSize());
 
@@ -170,6 +177,13 @@ public final class DialogCircuitCode extends JDialog
 
         contentPane.add(b, constraints);
 
+        copy.addActionListener(new ActionListener()
+        {
+            @Override public void actionPerformed(ActionEvent evt)
+            {
+                new TextTransfer().copyText(textArea.getText());
+            }
+        });
         ok.addActionListener(new ActionListener()
         {
             @Override public void actionPerformed(ActionEvent evt)
