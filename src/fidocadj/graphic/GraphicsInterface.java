@@ -1,5 +1,7 @@
 package fidocadj.graphic;
 
+import java.io.IOException;
+
 import fidocadj.geom.MapCoordinates;
 import fidocadj.layers.LayerDesc;
 
@@ -273,6 +275,23 @@ public interface GraphicsInterface
         @return a shape object.
     */
     ShapeInterface createShape();
+
+    /** Decode a raster image from its raw byte encoding (e.g. the bytes of
+        a PNG or JPEG file), compatible with the current implementation.
+        @param data the raw, encoded image bytes.
+        @return the decoded image, or null if the data could not be decoded.
+        @throws IOException if an I/O error occurs while decoding.
+    */
+    ImageInterface createImage(byte[] data) throws IOException;
+
+    /** Draw a raster image, scaled to fit the given rectangle.
+        @param img the image to be drawn.
+        @param x the x coordinate of the upper left corner.
+        @param y the y coordinate of the upper left corner.
+        @param width the width of the destination rectangle.
+        @param height the height of the destination rectangle.
+    */
+    void drawImage(ImageInterface img, int x, int y, int width, int height);
 
     /** Retrieve the current screen density in dots-per-inch.
         @return the screen resolution (density) in dots-per-inch.

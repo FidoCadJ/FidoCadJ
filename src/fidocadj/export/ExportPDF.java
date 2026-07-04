@@ -1288,6 +1288,66 @@ public final class ExportPDF implements ExportInterface, TextInterface
         }
     }
 
+    /** Called when exporting an embedded raster Image primitive. This
+        hand-written exporter builds its cross-reference table with a
+        fixed count of objects and manually-tracked byte offsets (see
+        numOfObjects): adding a new indirect object (an embedded Image
+        XObject) would risk corrupting that structure in a way this
+        exporter has no way to self-validate. A dashed placeholder
+        rectangle with a "[immagine]" label is drawn instead, using only
+        content-stream operators, which do not touch the object/xref
+        bookkeeping at all.
+
+        @param x1 the x position of the first corner.
+        @param y1 the y position of the first corner.
+        @param x2 the x position of the second corner.
+        @param y2 the y position of the second corner.
+        @param layer the layer that should be used.
+        @param opacity the opacity, between 0.0 (transparent) and 1.0
+            (fully opaque).
+        @param blackAndWhite true if the image should be shown in black
+            and white.
+        @param mimeType the mime subtype of the original file (e.g. "png").
+        @param base64Data the base64-encoded bytes of the original file.
+        @throws IOException if a disaster happens, i.e. a file can not be
+            accessed.
+    */
+    public void exportImage(int x1, int y1, int x2, int y2, int layer,
+        double opacity, boolean blackAndWhite, String mimeType,
+        String base64Data)
+        throws IOException
+    {
+        LayerDesc l=(LayerDesc)layerV.get(layer);
+        ColorInterface c=l.getColor();
+
+        checkColorAndWidth(c, 0.33);
+        registerDash(1);
+
+        outt.write("  "+x1+" "+y1+" m\n");
+        outt.write("  "+x2+" "+y1+" l\n");
+        outt.write("  "+x2+" "+y2+" l\n");
+        outt.write("  "+x1+" "+y2+" l\n");
+        outt.write("s\n");
+        registerDash(0);
+
+        int cx=(x1+x2)/2;
+        int cy=(y1+y2)/2;
+        int ys=20;
+
+        outt.write("BT\n");
+        currentFont="/F5";
+        outt.write(currentFont+" "+ys+" Tf\n");
+        currentFontSize=(float)ys;
+        outt.write("q\n");
+        outt.write("  1 0 0 1 "+ Globals.roundTo(cx)+" "+ Globals.roundTo(cy)+
+            " cm\n");
+        textx=cx;
+        texty=cy;
+        outt.write("  1 0 0 -1 0 0 cm\n");
+        dt.drawString("[immagine]", cx, cy);
+        outt.write("Q\nET\n");
+    }
+
     private void roundRect (double x1, double y1, double w, double h,
         double r, boolean filled)
         throws IOException

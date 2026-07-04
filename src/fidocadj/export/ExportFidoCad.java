@@ -19,6 +19,7 @@ import fidocadj.primitives.PrimitivePCBPad;
 import fidocadj.primitives.PrimitivePolygon;
 import fidocadj.primitives.PrimitiveComplexCurve;
 import fidocadj.primitives.PrimitiveRectangle;
+import fidocadj.primitives.PrimitiveImage;
 import fidocadj.graphic.DimensionG;
 import fidocadj.graphic.PointDouble;
 
@@ -573,6 +574,32 @@ public final class ExportFidoCad implements ExportInterface
             cLe(y1), cLe(x2),
             cLe(y2), isFilled,
             layer, dashStyle,
+            textFont, textFontSize).toString(extensions));
+    }
+
+    /** Called when exporting an embedded raster Image primitive.
+
+        @param x1 the x position of the first corner.
+        @param y1 the y position of the first corner.
+        @param x2 the x position of the second corner.
+        @param y2 the y position of the second corner.
+        @param layer the layer that should be used.
+        @param opacity the opacity, between 0.0 (transparent) and 1.0
+            (fully opaque).
+        @param blackAndWhite true if the image should be shown in black
+            and white.
+        @param mimeType the mime subtype of the original file (e.g. "png").
+        @param base64Data the base64-encoded bytes of the original file.
+        @throws IOException if a disaster happens, i.e. a file can not be
+            accessed.
+    */
+    public void exportImage(int x1, int y1, int x2, int y2, int layer,
+        double opacity, boolean blackAndWhite, String mimeType,
+        String base64Data)
+        throws IOException
+    {
+        out.write(new PrimitiveImage(cLe(x1), cLe(y1), cLe(x2), cLe(y2),
+            mimeType, base64Data, (float)opacity, blackAndWhite, layer,
             textFont, textFontSize).toString(extensions));
     }
 

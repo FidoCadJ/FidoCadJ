@@ -34,6 +34,7 @@ import fidocadj.globals.OSValidator;
 import fidocadj.toolbars.ToolbarZoom;
 import fidocadj.toolbars.ToolbarTools;
 import fidocadj.toolbars.ZoomToFitListener;
+import fidocadj.toolbars.InsertImageListener;
 import fidocadj.macropicker.MacroTree;
 import fidocadj.librarymodel.LibraryModel;
 import fidocadj.layermodel.LayerModel;
@@ -75,6 +76,7 @@ The class describing the main frame in which FidoCadJ runs.
 public final class FidoFrame extends JFrame implements
                                             ActionListener,
                                             ZoomToFitListener,
+                                            InsertImageListener,
                                             HasChangedListener,
                                             WindowFocusListener
 {
@@ -568,6 +570,7 @@ public final class FidoFrame extends JFrame implements
         toolZoom = new ToolbarZoom(layerDesc, this);
 
         toolBar.addSelectionListener(circuitPanel);
+        toolBar.addInsertImageListener(this);
         toolZoom.addLayerListener(circuitPanel);
 
         toolZoom.addGridStateListener(circuitPanel);
@@ -829,6 +832,15 @@ public final class FidoFrame extends JFrame implements
             setVisible(true);
         }
         repaint();
+    }
+
+    /** Called when the user clicks the "insert image" toolbar button.
+        Reuses the same file-chooser-then-place logic as the "Insert
+        image" menu item.
+    */
+    public void insertImage()
+    {
+        menuTools.handleInsertImage(this);
     }
 
     /** Set the current zoom to fit

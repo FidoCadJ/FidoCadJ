@@ -718,6 +718,49 @@ public final class ExportSVG implements ExportInterface, TextInterface
 
     }
 
+    /** Called when exporting an embedded raster Image primitive. SVG
+        natively supports embedding raster images via a data URI, so the
+        original file bytes are reused as-is (no re-encoding, no quality
+        loss). The "black and white" option is rendered with a CSS
+        grayscale filter, since the exporter only has the original file
+        bytes, not decoded pixels, available.
+
+        @param x1 the x position of the first corner.
+        @param y1 the y position of the first corner.
+        @param x2 the x position of the second corner.
+        @param y2 the y position of the second corner.
+        @param layer the layer that should be used.
+        @param opacity the opacity, between 0.0 (transparent) and 1.0
+            (fully opaque).
+        @param blackAndWhite true if the image should be shown in black
+            and white.
+        @param mimeType the mime subtype of the original file (e.g. "png").
+        @param base64Data the base64-encoded bytes of the original file.
+        @throws IOException if a disaster happens, i.e. a file can not be
+            accessed.
+    */
+    public void exportImage(int x1, int y1, int x2, int y2, int layer,
+        double opacity, boolean blackAndWhite, String mimeType,
+        String base64Data)
+        throws IOException
+    {
+        double x = Math.min(x1,x2);
+        double y = Math.min(y1,y2);
+        double w = Math.abs(x2-x1);
+        double h = Math.abs(y2-y1);
+        if (w==0) { w=0.5; }
+        if (h==0) { h=0.5; }
+
+        out.write("<image x=\""+cLe(x)+"\" y=\""+cLe(y)+"\" width=\""+
+            cLe(w)+"\" height=\""+cLe(h)+"\" preserveAspectRatio=\"none\" "+
+            "opacity=\""+opacity+"\" ");
+        if (blackAndWhite) {
+            out.write("style=\"filter:grayscale(1)\" ");
+        }
+        out.write("xlink:href=\"data:image/"+mimeType+";base64,"+
+            base64Data+"\"/>\n");
+    }
+
     /** Just be sure that the HEX values are given with two digits...
         NOT a speed sensitive context.
     */

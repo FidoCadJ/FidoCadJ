@@ -2,9 +2,16 @@ package fidocadj;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.imageio.ImageIO;
+import java.awt.Point;
+import java.awt.Dimension;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
+import java.util.Base64;
 
 import fidocadj.globals.Globals;
 import fidocadj.circuit.controllers.SelectionActions;
@@ -14,12 +21,15 @@ import fidocadj.circuit.controllers.CopyPasteActions;
 import fidocadj.circuit.controllers.EditorActions;
 import fidocadj.circuit.ImageAsCanvas;
 import fidocadj.circuit.CircuitPanel;
+import fidocadj.circuit.model.DrawingModel;
 import fidocadj.dialogs.DialogAttachImage;
 import fidocadj.dialogs.DialogAbout;
 import fidocadj.dialogs.DialogLayer;
 import fidocadj.dialogs.DialogCircuitCode;
 import fidocadj.clipboard.TextTransfer;
 import fidocadj.geom.ChangeCoordinatesListener;
+import fidocadj.geom.MapCoordinates;
+import fidocadj.primitives.PrimitiveImage;
 
 /**
  * MenuTools - Main menu creation and handling class for FidoCadJ.
@@ -692,11 +702,17 @@ public class MenuTools implements MenuListener
             .withShortcut(KeyEvent.VK_U, Globals.shortcutKey)
             .build();
 
+        JMenuItem insertImage = createMenuItem("Insert_image_menu",
+            "back_image.png").build();
+
         defineCircuit.addActionListener(al);
         updateLibraries.addActionListener(al);
+        insertImage.addActionListener(al);
 
         circuitMenu.add(defineCircuit);
         circuitMenu.add(updateLibraries);
+        circuitMenu.addSeparator();
+        circuitMenu.add(insertImage);
 
         return circuitMenu;
     }
@@ -855,6 +871,9 @@ public class MenuTools implements MenuListener
 
         actionHandlers.put(Globals.messages.getString("LibraryUpdate"),
             (frame, coordL) -> handleUpdateLibraries(frame));
+
+        actionHandlers.put(Globals.messages.getString("Insert_image_menu"),
+            (frame, coordL) -> handleInsertImage(frame));
 
         actionHandlers.put(Globals.messages.getString("About_menu"),
             (frame, coordL) -> handleAbout(frame));
@@ -1271,6 +1290,83 @@ public class MenuTools implements MenuListener
                     JOptionPane.INFORMATION_MESSAGE);
             }
         }
+    }
+
+    /**
+     * Handle inserting a new embedded image primitive.
+     * Opens a file chooser, reads the selected image file, and adds it
+     * to the drawing as a new selected, movable/resizable "IM" primitive
+     * centered in the currently visible area.
+     *
+     * @param frame the main application frame
+     */
+    void handleInsertImage(FidoFrame frame)
+    {
+        JFileChooser fc = new JFileChooser();
+        fc.setFileFilter(new FileNameExtensionFilter(
+            Globals.messages.getString("Image_files"),
+            "png", "jpg", "jpeg", "gif", "bmp"));
+        if (fc.showOpenDialog(frame) != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        File file = fc.getSelectedFile();
+
+        byte[] bytes;
+        BufferedImage img;
+        try {
+            bytes = Files.readAllBytes(file.toPath());
+            img = ImageIO.read(file);
+        } catch (IOException eE) {
+            img = null;
+            bytes = null;
+        }
+        if (img == null || bytes == null) {
+            JOptionPane.showMessageDialog(frame,
+                Globals.messages.getString("Can_not_attach_image"),
+                "",
+                JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        CircuitPanel circuitPanel = frame.getCircuitPanel();
+        DrawingModel dmp = circuitPanel.getDrawingModel();
+        MapCoordinates cs = circuitPanel.getMapCoordinates();
+
+        float cx;
+        float cy;
+        if (circuitPanel.father != null) {
+            Point viewPos = circuitPanel.father.getViewport()
+                .getViewPosition();
+            Dimension viewSize = circuitPanel.father.getViewport()
+                .getExtentSize();
+            cx = cs.unmapXnosnap(viewPos.x + viewSize.width/2);
+            cy = cs.unmapYnosnap(viewPos.y + viewSize.height/2);
+        } else {
+            cx = 100;
+            cy = 100;
+        }
+
+        // Scale the image's natural pixel size down to a reasonable
+        // logical size (about 200 logical units on the longest side).
+        double scale = 200.0/Math.max(img.getWidth(), img.getHeight());
+        float halfW = (float)(img.getWidth()*scale/2.0);
+        float halfH = (float)(img.getHeight()*scale/2.0);
+
+        String base64 = Base64.getEncoder().encodeToString(bytes);
+        String name = file.getName();
+        int dot = name.lastIndexOf('.');
+        String ext = dot>=0 ? name.substring(dot+1).toLowerCase() : "png";
+        String mime = "jpg".equals(ext) ? "jpeg" : ext;
+
+        circuitPanel.getSelectionActions().setSelectionAll(false);
+        PrimitiveImage p = new PrimitiveImage(cx-halfW, cy-halfH,
+            cx+halfW, cy+halfH, mime, base64, 1.0f, false,
+            circuitPanel.getCurrentLayer(), dmp.getTextFont(),
+            dmp.getTextFontSize());
+        dmp.addPrimitive(p, true, circuitPanel.getUndoActions());
+        p.setSelected(true);
+
+        frame.repaint();
     }
 
     /**

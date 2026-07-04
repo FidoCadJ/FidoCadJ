@@ -7,6 +7,7 @@ import java.awt.image.*;
 import fidocadj.geom.MapCoordinates;
 import fidocadj.layers.LayerDesc;
 import fidocadj.graphic.GraphicsInterface;
+import fidocadj.graphic.ImageInterface;
 import fidocadj.graphic.ShapeInterface;
 import fidocadj.graphic.TextInterface;
 import fidocadj.graphic.PolygonInterface;
@@ -420,6 +421,28 @@ public class GraphicsNull implements GraphicsInterface, TextInterface
     public ShapeInterface createShape()
     {
         return new ShapeNull();
+    }
+
+    /** Does nothing.
+        @param data ignored.
+        @return a new ImageNull instance.
+    */
+    public ImageInterface createImage(byte[] data)
+    {
+        return new ImageNull();
+    }
+
+    /** Does nothing.
+        @param img ignored.
+        @param x ignored.
+        @param y ignored.
+        @param width ignored.
+        @param height ignored.
+    */
+    public void drawImage(ImageInterface img, int x, int y,
+        int width, int height)
+    {
+        // nothing to do
     }
 
     /** Retrieve the current screen density in dots-per-inch.

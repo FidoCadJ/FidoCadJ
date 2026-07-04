@@ -465,6 +465,46 @@ public final class ExportEagle implements ExportInterface
         return false;
     }
 
+    /** Called when exporting an embedded raster Image primitive. Eagle
+        scripts have no command to import a raster image reachable from
+        this text-based scripting interface, so a placeholder rectangle
+        with a "[immagine]" label is drawn instead.
+
+        @param x1 the x position of the first corner.
+        @param y1 the y position of the first corner.
+        @param x2 the x position of the second corner.
+        @param y2 the y position of the second corner.
+        @param layer the layer that should be used.
+        @param opacity the opacity, between 0.0 (transparent) and 1.0
+            (fully opaque).
+        @param blackAndWhite true if the image should be shown in black
+            and white.
+        @param mimeType the mime subtype of the original file (e.g. "png").
+        @param base64Data the base64-encoded bytes of the original file.
+        @throws IOException when things goes horribly wrong, for example if
+            the file in which the output is being done is not accessible.
+    */
+    public void exportImage(int x1, int y1, int x2, int y2, int layer,
+        double opacity, boolean blackAndWhite, String mimeType,
+        String base64Data)
+        throws IOException
+    {
+        out.write("Layer 94;\n");
+        out.write("Set Wire_Bend 0;\n");
+        out.write("Wire ("+een(x1*res)+" "+een((dim.height-y1)*res)+") ("+
+            een(x2*res)+" "+een((dim.height-y1)*res)+");\n");
+        out.write("Wire ("+een(x2*res)+" "+een((dim.height-y1)*res)+") ("+
+            een(x2*res)+" "+een((dim.height-y2)*res)+");\n");
+        out.write("Wire ("+een(x2*res)+" "+een((dim.height-y2)*res)+") ("+
+            een(x1*res)+" "+een((dim.height-y2)*res)+");\n");
+        out.write("Wire ("+een(x1*res)+" "+een((dim.height-y2)*res)+") ("+
+            een(x1*res)+" "+een((dim.height-y1)*res)+");\n");
+        out.write("Set Wire_Bend 2;\n");
+        out.write("Text [immagine] R0 ("+een(((x1+x2)/2.0)*res)+" "+
+            een((dim.height-(y1+y2)/2.0)*res)+");\n");
+        out.write("Layer 91;\n");
+    }
+
     /** Called when exporting an arrow.
         @param x position of the tip of the arrow.
         @param y position of the tip of the arrow.

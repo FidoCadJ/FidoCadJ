@@ -713,6 +713,46 @@ public final class ExportPGF implements ExportInterface
     }
 
 
+    /** Called when exporting an embedded raster Image primitive. The PGF/
+        TikZ export does not embed raster images: a dashed placeholder
+        rectangle with a "[immagine]" label is drawn instead.
+
+        @param x1 the x position of the first corner.
+        @param y1 the y position of the first corner.
+        @param x2 the x position of the second corner.
+        @param y2 the y position of the second corner.
+        @param layer the layer that should be used.
+        @param opacity the opacity, between 0.0 (transparent) and 1.0
+            (fully opaque).
+        @param blackAndWhite true if the image should be shown in black
+            and white.
+        @param mimeType the mime subtype of the original file (e.g. "png").
+        @param base64Data the base64-encoded bytes of the original file.
+        @throws IOException if a disaster happens, i.e. a file can not be
+            accessed.
+    */
+    public void exportImage(int x1, int y1, int x2, int y2, int layer,
+        double opacity, boolean blackAndWhite, String mimeType,
+        String base64Data)
+        throws IOException
+    {
+        registerColorSize(layer, 0.33);
+        registerDash(1);
+
+        out.write("\\pgfmoveto{\\pgfxy("+x1+","+y1+")}\n");
+        out.write("\\pgflineto{\\pgfxy("+x2+","+y1+")}\n");
+        out.write("\\pgflineto{\\pgfxy("+x2+","+y2+")}\n");
+        out.write("\\pgflineto{\\pgfxy("+x1+","+y2+")}\n");
+        out.write("\\pgfclosepath \n");
+        out.write("\\pgfqstroke \n");
+
+        registerDash(0);
+        out.write("\\begin{pgfmagnify}{1}{-1}\n");
+        out.write("\\pgfputat{\\pgfxy("+((x1+x2)/2)+","+(-(y1+y2)/2)+
+            ")}{\\pgfbox[center,center]{[immagine]}}\n");
+        out.write("\\end{pgfmagnify}\n");
+    }
+
     /** Check if there has been a change in the actual color and stroke width.
         if yes, change accordingly.
         @param layer the layer number (used for the color specification).

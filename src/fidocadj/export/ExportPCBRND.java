@@ -549,6 +549,35 @@ public final class ExportPCBRND implements ExportInterface
         pushElement(newRect, layer);
     }
 
+    /** Called when exporting an embedded raster Image primitive. gEDA
+        PCB/pcb-rnd have no raster-image element that this hand-written
+        exporter can produce, so a placeholder rectangle with a
+        "[immagine]" label is drawn on the same layer instead.
+
+        @param x1 the x position of the first corner.
+        @param y1 the y position of the first corner.
+        @param x2 the x position of the second corner.
+        @param y2 the y position of the second corner.
+        @param layer the layer that should be used.
+        @param opacity the opacity, between 0.0 (transparent) and 1.0
+            (fully opaque).
+        @param blackAndWhite true if the image should be shown in black
+            and white.
+        @param mimeType the mime subtype of the original file (e.g. "png").
+        @param base64Data the base64-encoded bytes of the original file.
+        @throws IOException when things goes horribly wrong, for example if
+            the file in which the output is being done is not accessible.
+    */
+    public void exportImage(int x1, int y1, int x2, int y2, int layer,
+        double opacity, boolean blackAndWhite, String mimeType,
+        String base64Data)
+        throws IOException
+    {
+        String placeholder = fidoRectToPCBLines(x1, y1, x2, y2, 2)
+            + fidoTextToPCBText((x1+x2)/2, (y1+y2)/2, "[immagine]", 20, 0);
+        pushElement(placeholder, layer);
+    }
+
     /** Called when exporting a Curve primitive.
         @param vertices array containing the position of each vertex.
         @param nVertices number of vertices.

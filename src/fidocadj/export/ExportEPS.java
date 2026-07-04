@@ -792,6 +792,57 @@ public final class ExportEPS implements ExportInterface, TextInterface
         }
     }
 
+    /** Called when exporting an embedded raster Image primitive. This
+        hand-written EPS exporter does not embed raster images (a real
+        DCT/ASCII85 image operator was judged too high-risk to get right
+        without a way to validate the resulting file): a dashed
+        placeholder rectangle with a "[immagine]" label is drawn instead.
+
+        @param x1 the x position of the first corner.
+        @param y1 the y position of the first corner.
+        @param x2 the x position of the second corner.
+        @param y2 the y position of the second corner.
+        @param layer the layer that should be used.
+        @param opacity the opacity, between 0.0 (transparent) and 1.0
+            (fully opaque).
+        @param blackAndWhite true if the image should be shown in black
+            and white.
+        @param mimeType the mime subtype of the original file (e.g. "png").
+        @param base64Data the base64-encoded bytes of the original file.
+        @throws IOException when things goes horribly wrong, for example if
+            the file in which the output is being done is not accessible.
+    */
+    public void exportImage(int x1, int y1, int x2, int y2, int layer,
+        double opacity, boolean blackAndWhite, String mimeType,
+        String base64Data)
+        throws IOException
+    {
+        LayerDesc l=(LayerDesc)layerV.get(layer);
+        ColorInterface c=l.getColor();
+        checkColorAndWidth(c, 0.33);
+        registerDash(1);
+
+        out.write("newpath\n");
+        out.write(""+Globals.roundTo(x1,PREC)+" "+Globals.roundTo(y1,PREC)+
+            " moveto\n");
+        out.write(""+Globals.roundTo(x2,PREC)+" "+Globals.roundTo(y1,PREC)+
+            " lineto\n");
+        out.write(""+Globals.roundTo(x2,PREC)+" "+Globals.roundTo(y2,PREC)+
+            " lineto\n");
+        out.write(""+Globals.roundTo(x1,PREC)+" "+Globals.roundTo(y2,PREC)+
+            " lineto\n");
+        out.write("closepath\n");
+        out.write("stroke\n");
+        registerDash(0);
+
+        out.write(""+((x1+x2)/2)+" "+((y1+y2)/2)+" moveto\n");
+        out.write("gsave\n");
+        out.write("  /Helvetica findfont 12 scalefont setfont\n");
+        out.write("  1 -1 scale\n");
+        out.write("  ([immagine]) show\n");
+        out.write("grestore\n");
+    }
+
     private void roundRect (double x1, double y1, double w, double h,
         double r, boolean filled)
         throws IOException

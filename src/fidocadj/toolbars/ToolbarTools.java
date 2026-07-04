@@ -1,10 +1,12 @@
 package fidocadj.toolbars;
 
 import java.awt.event.*;
+import java.net.URL;
 import javax.swing.*;
 import java.util.*;
 
 import fidocadj.circuit.controllers.ElementsEdtActions;
+import fidocadj.globals.Globals;
 import fidocadj.globals.SettingsManager;
 
 
@@ -72,6 +74,7 @@ public final class ToolbarTools extends JToolBar
     private final JToggleButton connection;
     private final JToggleButton pcbline;
     private final JToggleButton pcbpad;
+    private final JButton insertImage;
     private final JLabel fileName;
 
     private String base;
@@ -80,6 +83,8 @@ public final class ToolbarTools extends JToolBar
     private final ButtonGroup group;
     private final List<JToggleButton> toolButtonsList;
     private final Map<JToggleButton, Integer> circuitPanelConstants;
+
+    private InsertImageListener insertImageListener;
 
     /** On some operating systems, namely MacOS, the filename is shown in the
         toolbar.
@@ -422,6 +427,34 @@ public final class ToolbarTools extends JToolBar
             }
         });
 
+        // Unlike the other tools, inserting an image is not an
+        // interactive click-drag placement mode: it immediately opens a
+        // file chooser. So this is a plain (non-toggle, non-grouped)
+        // button, following the same one-shot pattern used elsewhere for
+        // "zoom to fit" in ToolbarZoom.
+        URL insertImageUrl = ToolbarTools.class.getResource(base+"image.png");
+        insertImage = insertImageUrl==null
+            ? new JButton(showText
+                ? Globals.messages.getString("Image_tool") : "")
+            : new JButton(showText
+                ? Globals.messages.getString("Image_tool") : "",
+                new ImageIcon(insertImageUrl));
+        insertImage.setToolTipText(
+            Globals.messages.getString("tooltip_image"));
+        insertImage.setVerticalTextPosition(SwingConstants.BOTTOM);
+        insertImage.setHorizontalTextPosition(SwingConstants.CENTER);
+        insertImage.putClientProperty("Quaqua.Button.style","toolBarTab");
+        insertImage.putClientProperty("JButton.buttonType","segmented");
+        insertImage.addActionListener(new ActionListener() {
+            @Override public void actionPerformed(ActionEvent ev)
+            {
+                if (insertImageListener!=null) {
+                    insertImageListener.insertImage();
+                }
+            }
+        });
+        add(insertImage);
+
         fileName=new JLabel("");
         add(Box.createGlue());
         add(fileName);
@@ -440,6 +473,15 @@ public final class ToolbarTools extends JToolBar
     public void addSelectionListener(ChangeSelectionListener c)
     {
         selectionListener=c;
+    }
+
+    /** Add a listener called when the user clicks the "insert image"
+        toolbar button.
+        @param c the insert image listener.
+    */
+    public void addInsertImageListener(InsertImageListener c)
+    {
+        insertImageListener=c;
     }
 
     /** This method finds the button selected at the moment.

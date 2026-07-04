@@ -437,6 +437,31 @@ public final class ExportDXF implements ExportInterface
     }
 
     /** {@inheritDoc} */
+    public void exportImage(int x1, int y1, int x2, int y2, int layer,
+        double opacity, boolean blackAndWhite, String mimeType,
+        String base64Data)
+        throws IOException
+    {
+        // DXF R12 has no raster-image entity that this hand-written
+        // exporter can embed safely: draw a dashed placeholder rectangle
+        // with a "[immagine]" label instead (see class documentation).
+        currentLayer = layer;
+
+        double[] xs = {x1, x2, x2, x1};
+        double[] ys = {y1, y1, y2, y2};
+        writePolyline(xs, ys, 4, true, layer, 1, -1);
+
+        double cx = (x1+x2)/2.0;
+        double cy = (y1+y2)/2.0;
+        double heightFido = Math.abs(y2-y1)*0.1;
+        if (heightFido<=0) {
+            heightFido = 10;
+        }
+        writeText(cx, cy+heightFido/2, heightFido*MM_PER_UNIT, 1.0, 0.0,
+            0, "STANDARD", layer, "[immagine]");
+    }
+
+    /** {@inheritDoc} */
     public PointPr exportArrow(double x, double y, double xc, double yc,
         double l, double h, int style)
         throws IOException

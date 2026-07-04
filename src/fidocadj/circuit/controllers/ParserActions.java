@@ -21,6 +21,7 @@ import fidocadj.primitives.PrimitivePCBLine;
 import fidocadj.primitives.PrimitivePCBPad;
 import fidocadj.primitives.PrimitiveRectangle;
 import fidocadj.primitives.PrimitiveOval;
+import fidocadj.primitives.PrimitiveImage;
 import fidocadj.primitives.MacroDesc;
 import fidocadj.primitives.PrimitivePolygon;
 
@@ -162,12 +163,20 @@ public class ParserActions
     {
         StringBuffer s=registerConfiguration(extensions);
 
+        // Embedded images are always serialized last, regardless of their
+        // drawing/z-order, so that a quick look at the FidoCadJ file shows
+        // the "regular" primitives first and the (potentially huge)
+        // base64-encoded image lines at the very end.
+        StringBuffer images=new StringBuffer();
+
         for (GraphicPrimitive g:model.getPrimitiveVector()){
-            s.append(g.toString(extensions));
+            StringBuffer dest = g instanceof PrimitiveImage ? images : s;
+            dest.append(g.toString(extensions));
             if(useWindowsLineFeed) {
-                s.append("\r");
+                dest.append("\r");
             }
         }
+        s.append(images);
         return s;
     }
     /** If it is needed, provides all the configurations settings at
@@ -481,6 +490,8 @@ public class ParserActions
                                 macroCounter = 2;
                             } else if (hasFCJ && "SA".equals(oldTokens[0])) {
                                 macroCounter = 2;
+                            } else if (hasFCJ && "IM".equals(oldTokens[0])) {
+                                macroCounter = 2;
                             }
                             hasFCJ=false;
 
@@ -587,6 +598,16 @@ public class ParserActions
                             g.parseTokens(tokens, j+1);
                             g.setSelected(selectNew);
                             //addPrimitive(g,false,false);
+                        } else if("IM".equals(tokens[0])) {
+                            hasFCJ=true;
+                            for(l=0; l<j+1; ++l) {
+                                oldTokens[l]=tokens[l];
+                            }
+                            oldJ=j;
+                            macroCounter=0;
+                            g=new PrimitiveImage(macroFont, macroFontSize);
+                            g.parseTokens(tokens, j+1);
+                            g.setSelected(selectNew);
                         }  else if("EV".equals(tokens[0])
                             ||"EP".equals(tokens[0]))
                         {
@@ -814,6 +835,9 @@ public class ParserActions
                 addPrimitive = true;
             } else if("SA".equals(oldTokens[0])) {
                 g=new PrimitiveConnection(macroFont, macroFontSize);
+                addPrimitive = true;
+            } else if("IM".equals(oldTokens[0])) {
+                g=new PrimitiveImage(macroFont, macroFontSize);
                 addPrimitive = true;
             }
         }

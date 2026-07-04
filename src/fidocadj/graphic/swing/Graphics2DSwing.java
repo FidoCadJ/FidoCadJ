@@ -3,13 +3,17 @@ package fidocadj.graphic.swing;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.*;
+import javax.imageio.ImageIO;
 
 import fidocadj.geom.MapCoordinates;
 import fidocadj.globals.Globals;
 import fidocadj.layers.LayerDesc;
 import fidocadj.graphic.DecoratedText;
 import fidocadj.graphic.ColorInterface;
+import fidocadj.graphic.ImageInterface;
 import fidocadj.graphic.PolygonInterface;
 import fidocadj.graphic.ShapeInterface;
 import fidocadj.graphic.TextInterface;
@@ -1202,7 +1206,44 @@ public class Graphics2DSwing implements GraphicsInterface, TextInterface
     {
         return new ColorSwing(g.getColor());
     }
-    
+
+    /** Decode a raster image from its raw byte encoding.
+        @param data the raw, encoded image bytes.
+        @return the decoded image (instance of ImageSwing), or null if the
+            data could not be decoded.
+        @throws IOException if an I/O error occurs while decoding.
+    */
+    public ImageInterface createImage(byte[] data)
+        throws IOException
+    {
+        BufferedImage decoded = ImageIO.read(
+            new ByteArrayInputStream(data));
+        if (decoded == null) {
+            return null;
+        }
+        return new ImageSwing(decoded);
+    }
+
+    /** Draw a raster image, scaled to fit the given rectangle.
+        @param img the image to be drawn.
+        @param x the x coordinate of the upper left corner.
+        @param y the y coordinate of the upper left corner.
+        @param width the width of the destination rectangle.
+        @param height the height of the destination rectangle.
+    */
+    public void drawImage(ImageInterface img, int x, int y,
+        int width, int height)
+    {
+        if (!(img instanceof ImageSwing)) {
+            return;
+        }
+        BufferedImage bi = ((ImageSwing)img).getImageSwing();
+        if (bi == null) {
+            return;
+        }
+        g.drawImage(bi, x, y, width, height, null);
+    }
+
     /** Retrieve the current screen density in dots-per-inch.
         @return the screen resolution (density) in dots-per-inch.
     */
