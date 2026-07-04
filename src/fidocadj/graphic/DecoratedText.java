@@ -171,6 +171,79 @@ public class DecoratedText
         return totalWidth;
     }
 
+    /** Compute how far a decorated string's glyphs stray from the plain
+        text baseline box because of nested subscript/superscript
+        shifting, so that a hit-test/selection bounding box can be
+        expanded to actually cover them (see issue #197: clicking on a
+        deeply-nested subscript/superscript character selected the wrong
+        primitive because the selection box was not compensating for the
+        vertical shift, only for the width).
+        This mirrors the exact shift formula used by {@link #drawString},
+        given the same base font size that will be passed to
+        {@link fidocadj.graphic.TextInterface#setFontSize(double)} /
+        the font passed to <code>setFont</code> before drawing.
+        Note: unlike {@link #getDecoratedStringWidth}, this method takes
+        the base font size explicitly rather than reading it from
+        <code>g.getFontSize()</code>, since some TextInterface
+        implementations (e.g. the headless one used for hit-testing) do
+        not keep getFontSize() in sync with the font last passed to
+        setFont(), only with setFontSize().
+        @param str the string to measure (may contain ^ and _ commands).
+        @param baseFontSize the font size (same unit/scale as the one
+            passed to setFont() before this string was/will be drawn).
+        @param baseAscent the ascent of the base (unshifted, level 0) font,
+            in the same unit the caller wants the result expressed in.
+        @param baseDescent the descent of the base (unshifted, level 0)
+            font, in the same unit as baseAscent.
+        @return a two-element array {top, bottom}, both relative to the
+            unshifted baseline (top is typically negative, i.e. above the
+            baseline; bottom is typically positive, i.e. below it) and
+            expressed in the same unit as baseAscent/baseDescent.
+    */
+    public int[] getDecoratedVerticalExtent(String str,
+        double baseFontSize, double baseAscent, double baseDescent)
+    {
+        resetTokenization(str);
+        int top = 0;
+        int bottom = 0;
+        int t;
+
+        while((t = getToken()) != END) {
+            switch(t) {
+                case CHUNK:
+                    float mult = getSizeMultLevel();
+                    // drawString() draws this chunk at baseline
+                    // "y - shift" (see below): the chunk's own top/bottom,
+                    // relative to the *outer* baseline, are therefore
+                    // offset by "-shift", not "+shift".
+                    double shift = exponentLevel*baseFontSize*mult*0.5;
+                    int chunkTop =
+                        (int)Math.round(-shift - baseAscent*mult);
+                    int chunkBottom =
+                        (int)Math.round(-shift + baseDescent*mult);
+                    if (chunkTop < top) { top = chunkTop; }
+                    if (chunkBottom > bottom) { bottom = chunkBottom; }
+                    break;
+
+                case EXPONENT:
+                    ++exponentLevel;
+                    break;
+
+                case INDEX:
+                    --exponentLevel;
+                    break;
+
+                case END:
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        return new int[]{top, bottom};
+    }
+
     /** Draw a string on the current graphic context.
         @param str the string to be drawn.
         @param x the x coordinate of the starting point.

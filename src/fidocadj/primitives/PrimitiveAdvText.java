@@ -73,6 +73,11 @@ public final class PrimitiveAdvText extends GraphicPrimitive
     private int hSCI;               // NOPMD
     private int thSCI;              // NOPMD
     private int wSCI;               // NOPMD
+    // Vertical extent (relative to the baseline) of the decorated string's
+    // subscript/superscript glyphs, in the same logical units as hSCI/
+    // thSCI/wSCI. See issue #197.
+    private int topSCI;             // NOPMD
+    private int bottomSCI;          // NOPMD
     private int[] xpSCI, ypSCI;     // NOPMD
 
     private boolean mirror;
@@ -81,6 +86,10 @@ public final class PrimitiveAdvText extends GraphicPrimitive
     private int h;
     private int th;
     private int w;
+    // Screen-pixel cache of the same decorated vertical extent computed in
+    // draw(), reused by getDistanceToPoint() when only the zoom changed.
+    private int decoTop;
+    private int decoBottom;
     private double ymagnitude;
     private boolean coordmirroring;
 
@@ -222,6 +231,10 @@ public final class PrimitiveAdvText extends GraphicPrimitive
 
             DecoratedText dt = new DecoratedText(g.getTextInterface());
             w = dt.getDecoratedStringWidth(txt);
+            int[] decoExtent = dt.getDecoratedVerticalExtent(txt,
+                six * 12 * coordSys.getYMagnitude() / 7 + .5, h, th-h);
+            decoTop = decoExtent[0];
+            decoBottom = decoExtent[1];
 
             xyfactor = 1.0;
             needsStretching = false;
@@ -420,10 +433,17 @@ public final class PrimitiveAdvText extends GraphicPrimitive
 
                 hSCI = gSCI.getFontAscent();
                 thSCI = hSCI + gSCI.getFontDescent();
+
+                int[] extentSCI = dt.getDecoratedVerticalExtent(txt,
+                        (int) (six * 12.0 / 7.0 + .5), hSCI, thSCI-hSCI);
+                topSCI = extentSCI[0];
+                bottomSCI = extentSCI[1];
             } else {
                 hSCI = (int) (h / ymagnitude);
                 thSCI = (int) (th / ymagnitude);
                 wSCI = (int) (w / ymagnitude);
+                topSCI = (int) (decoTop / ymagnitude);
+                bottomSCI = (int) (decoBottom / ymagnitude);
             }
             // recalcSize is set to true when the draw method detects that the
             // graphical appearance of the text should be recalculated.
@@ -436,10 +456,12 @@ public final class PrimitiveAdvText extends GraphicPrimitive
             orientationSCI = o;
 
             if (siy / six != 10 / 7) {
-                hSCI = (int) Math.round(
-                        hSCI * ((double) siy * 22.0 / 40.0 / (double) six));
-                thSCI = (int) Math.round((double) thSCI * ((double) siy
-                        * 22.0 / 40.0 / (double) six));
+                double scaleFactor = (double) siy * 22.0 / 40.0
+                        / (double) six;
+                hSCI = (int) Math.round(hSCI * scaleFactor);
+                thSCI = (int) Math.round((double) thSCI * scaleFactor);
+                topSCI = (int) Math.round(topSCI * scaleFactor);
+                bottomSCI = (int) Math.round(bottomSCI * scaleFactor);
             }
 
             // TODO: the calculation fails when mirrored text or rotated is
@@ -461,23 +483,38 @@ public final class PrimitiveAdvText extends GraphicPrimitive
                 double si = Math.sin(Math.toRadians(orientation));
                 double co = Math.cos(Math.toRadians(orientation));
 
+                // The origin corner and the perpendicular-to-text extent
+                // are expanded (rather than starting exactly at yaSCI and
+                // spanning thSCI) so that a deeply nested subscript or
+                // superscript -- whose glyphs are shifted well outside the
+                // plain ascent/descent box -- is still covered (#197).
+                int perpExtent = bottomSCI-topSCI;
+                double ox = xaSCI + topSCI * si;
+                double oy = yaSCI + topSCI * co;
+
                 xpSCI = new int[4];
                 ypSCI = new int[4];
 
-                xpSCI[0] = xaSCI;
-                ypSCI[0] = yaSCI;
-                xpSCI[1] = (int) (xaSCI + thSCI * si);
-                ypSCI[1] = (int) (yaSCI + thSCI * co);
-                xpSCI[2] = (int) (xaSCI + thSCI * si + wSCI * co);
-                ypSCI[2] = (int) (yaSCI + thSCI * co - wSCI * si);
-                xpSCI[3] = (int) (xaSCI + wSCI * co);
-                ypSCI[3] = (int) (yaSCI - wSCI * si);
+                xpSCI[0] = (int) ox;
+                ypSCI[0] = (int) oy;
+                xpSCI[1] = (int) (ox + perpExtent * si);
+                ypSCI[1] = (int) (oy + perpExtent * co);
+                xpSCI[2] = (int) (ox + perpExtent * si + wSCI * co);
+                ypSCI[2] = (int) (oy + perpExtent * co - wSCI * si);
+                xpSCI[3] = (int) (ox + wSCI * co);
+                ypSCI[3] = (int) (oy - wSCI * si);
             }
         }
 
         if (orientationSCI == 0) {
+            // The hit-test box is expanded (rather than spanning exactly
+            // [yaSCI, yaSCI+thSCI]) to cover subscript/superscript glyphs
+            // shifted outside the plain ascent/descent box (#197).
+            int baseline = yaSCI + hSCI;
+            int boxTop = baseline + topSCI;
+            int boxHeight = bottomSCI - topSCI;
             if (GeometricDistances.pointInRectangle(Math.min(xaSCI,
-                    xaSCI + wSCI), yaSCI, Math.abs(wSCI), thSCI, px, py))
+                    xaSCI + wSCI), boxTop, Math.abs(wSCI), boxHeight, px, py))
             {
                 return 0;
             }
