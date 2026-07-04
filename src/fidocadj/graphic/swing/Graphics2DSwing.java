@@ -93,10 +93,25 @@ public class Graphics2DSwing implements GraphicsInterface, TextInterface
     // Here are some other local variables made global for avoiding memory
     // allocations (used in drawGrid).
     private BufferedImage bufferedImage; // Useful for grid calculation
-    //private double oldZoom;            // TODO: maybe the same as actualZoom?
     private TexturePaint tp;
     private int width;                   // NOPMD (complains -> local variable)
     private int height;                  // NOPMD (complains -> local variable)
+
+    // Grid rendering optimization: skip re-deriving the grid parameters
+    // (which strategy to use, coordinate lists, ...) when nothing that
+    // affects the result has changed since the last call -- e.g. while
+    // dragging a primitive, the grid itself does not change for many
+    // consecutive repaints.
+    private static final int GRID_MODE_LINES = 1;
+    private static final int GRID_MODE_TEXTURE = 2;
+    private static final int GRID_MODE_FALLBACK = 3;
+
+    private String lastGridSignature;
+    private int lastGridMode;
+    private java.util.List<Integer> lastXLines;
+    private java.util.List<Integer> lastYLines;
+    private int[] lastXDotsScreen;
+    private int[] lastYDotsScreen;
 
     private BasicStroke[] strokeList;
     private float actual_w;
@@ -719,7 +734,6 @@ public class Graphics2DSwing implements GraphicsInterface, TextInterface
             this.bufferedImage = cached.image;
             this.width = cached.width;
             this.height = cached.height;
-            //this.oldZoom = cached.zoom;
             return false;
         }
         
@@ -810,7 +824,6 @@ public class Graphics2DSwing implements GraphicsInterface, TextInterface
 
         g2d.dispose();
 
-        //oldZoom = z;
         Rectangle anchor = new Rectangle(width, height);
         tp = new TexturePaint(bufferedImage, anchor);
 
@@ -846,9 +859,119 @@ public class Graphics2DSwing implements GraphicsInterface, TextInterface
         drawGridOptimized(cs, xmin, ymin, xmax, ymax, colorDots, colorLines);
     }
 
+    /** Build a signature string covering every parameter that affects the
+        outcome of {@link #drawGridOptimized}, so that repeated calls with
+        an unchanged view (e.g. while dragging a primitive) can skip
+        straight to replaying the previous frame's draw commands instead
+        of re-deriving everything from scratch.
+        @param cs the coordinate map description.
+        @param xmin the x (screen) coordinate of the upper left corner.
+        @param ymin the y (screen) coordinate of the upper left corner.
+        @param xmax the x (screen) coordinate of the bottom right corner.
+        @param ymax the y (screen) coordinate of the bottom right corner.
+        @param colorDots the color for dot grid.
+        @param colorLines the color for lines grid.
+        @return a string uniquely identifying this combination of
+            parameters.
+    */
+    private String generateFrameSignature(MapCoordinates cs,
+            int xmin, int ymin, int xmax, int ymax,
+            ColorInterface colorDots, ColorInterface colorLines)
+    {
+        ColorSwing cd = (ColorSwing) colorDots;
+        ColorSwing cl = (ColorSwing) colorLines;
+        // Panning (xCenter/yCenter) and orientation/mirroring must be
+        // included here even though the pre-existing texture-cache key
+        // (generateGridCacheKey) does not track them: unlike that key,
+        // which only identifies a repeatable texture tile, this
+        // signature must identify the exact rendered frame, and panning
+        // changes where the grid points fall within a fixed xmin..xmax/
+        // ymin..ymax screen window.
+        return String.format(java.util.Locale.ROOT,
+            "%.3f_%d_%d_%d_%d_%d_%d_%.3f_%.3f_%d_%b_%d_%d",
+            cs.getYMagnitude(), cs.getXGridStep(), cs.getYGridStep(),
+            xmin, ymin, xmax, ymax,
+            cs.getXCenter(), cs.getYCenter(), cs.getOrientation(),
+            cs.mirror,
+            cd.getColorSwing().getRGB(), cl.getColorSwing().getRGB());
+    }
+
+    /** Temporarily switch to the cheapest rendering hints for a large
+        flat-color fill such as the grid's texture blit or its fallback
+        dot-by-dot loop: a repeating, already pixel-aligned pattern does
+        not benefit from antialiasing/bicubic interpolation, but those
+        hints (enabled by CircuitPanel.activateDrawingSettings for the
+        rest of the drawing) are still active when the grid is painted.
+        @return the previous rendering hints, to be restored via
+            {@link #endFastFill}.
+    */
+    private RenderingHints beginFastFill()
+    {
+        RenderingHints saved = g.getRenderingHints();
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_OFF);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_SPEED);
+        return saved;
+    }
+
+    /** Restore rendering hints saved by {@link #beginFastFill}.
+        @param saved the hints returned by {@link #beginFastFill}.
+    */
+    private void endFastFill(RenderingHints saved)
+    {
+        g.setRenderingHints(saved);
+    }
+
+    /** Replay the draw commands of the last frame, when nothing that
+        affects the result has changed since then.
+        @param xmin the x (screen) coordinate of the upper left corner.
+        @param ymin the y (screen) coordinate of the upper left corner.
+        @param xmax the x (screen) coordinate of the bottom right corner.
+        @param ymax the y (screen) coordinate of the bottom right corner.
+        @param colorDots the color for dot grid.
+        @param colorLines the color for lines grid.
+    */
+    private void replayLastFrame(int xmin, int ymin, int xmax, int ymax,
+            ColorInterface colorDots, ColorInterface colorLines)
+    {
+        switch (lastGridMode) {
+            case GRID_MODE_LINES:
+                ColorSwing clrl = (ColorSwing) colorLines;
+                g.setColor(clrl.getColorSwing());
+                for (Integer xCoord : lastXLines) {
+                    g.drawLine(xCoord, ymin, xCoord, ymax);
+                }
+                for (Integer yCoord : lastYLines) {
+                    g.drawLine(xmin, yCoord, xmax, yCoord);
+                }
+                break;
+            case GRID_MODE_FALLBACK:
+                ColorSwing clrd = (ColorSwing) colorDots;
+                g.setColor(clrd.getColorSwing());
+                RenderingHints savedFallback = beginFastFill();
+                for (int i = 0; i < lastXDotsScreen.length; ++i) {
+                    g.fillRect(lastXDotsScreen[i], lastYDotsScreen[i], 1, 1);
+                }
+                endFastFill(savedFallback);
+                break;
+            case GRID_MODE_TEXTURE:
+            default:
+                if (tp != null) {
+                    RenderingHints savedTexture = beginFastFill();
+                    g.setPaint(tp);
+                    g.fillRect(0, 0, xmax, ymax);
+                    endFastFill(savedTexture);
+                }
+                break;
+        }
+    }
+
     /** Internal optimized implementation of grid drawing.
         This method contains all the performance optimizations.
-        
+
         @param cs the coordinate map description
         @param xmin the x (screen) coordinate of the upper left corner
         @param ymin the y (screen) coordinate of the upper left corner
@@ -857,11 +980,22 @@ public class Graphics2DSwing implements GraphicsInterface, TextInterface
         @param colorDots the color for dot grid
         @param colorLines the color for lines grid
     */
-    private void drawGridOptimized(MapCoordinates cs, 
-                        int xmin, int ymin, 
-                        int xmax, int ymax, 
+    private void drawGridOptimized(MapCoordinates cs,
+                        int xmin, int ymin,
+                        int xmax, int ymax,
                         ColorInterface colorDots, ColorInterface colorLines)
     {
+        // If the view has not changed at all since the last call (e.g.
+        // while dragging a primitive, panning/zooming apart), skip
+        // straight to replaying the previous frame instead of
+        // re-deriving the grid strategy/coordinates from scratch.
+        String signature = generateFrameSignature(cs, xmin, ymin, xmax, ymax,
+            colorDots, colorLines);
+        if (signature.equals(lastGridSignature)) {
+            replayLastFrame(xmin, ymin, xmax, ymax, colorDots, colorLines);
+            return;
+        }
+
         // Drawing the grid seems easy, but it appears that setting a pixel
         // takes a lot of time. Basically, we create a textured brush and we
         // use it to paint the entire specified region.
@@ -881,34 +1015,38 @@ public class Graphics2DSwing implements GraphicsInterface, TextInterface
             // Lines! This is the fastest approach for widely spaced grids
             ColorSwing clrl = (ColorSwing)colorLines;
             g.setColor(clrl.getColorSwing());
-            
-            // Pre-calculate all X coordinates to avoid 
+
+            // Pre-calculate all X coordinates to avoid
             // repeated unmapXsnap/mapXr calls in the loop
             java.util.List<Integer> xCoords = new java.util.ArrayList<>();
-            for (double x = cs.unmapXsnap(xmin); 
+            for (double x = cs.unmapXsnap(xmin);
                     x <= cs.unmapXsnap(xmax); x += dx) {
                 xCoords.add((int)Math.round(cs.mapXr(x, 0)));
             }
-            
+
             // Draw vertical lines using pre-calculated coordinates
             for (Integer xCoord : xCoords) {
                 g.drawLine(xCoord, ymin, xCoord, ymax);
             }
-            
+
             // Pre-calculate and draw horizontal lines
             java.util.List<Integer> yCoords = new java.util.ArrayList<>();
-            for (double y = cs.unmapYsnap(ymin); 
+            for (double y = cs.unmapYsnap(ymin);
                     y <= cs.unmapYsnap(ymax); y += dy) {
                 yCoords.add((int)Math.round(cs.mapYr(0, y)));
             }
-            
+
             for (Integer yCoord : yCoords) {
                 g.drawLine(xmin, yCoord, xmax, yCoord);
             }
-            
+
+            lastGridMode = GRID_MODE_LINES;
+            lastXLines = xCoords;
+            lastYLines = yCoords;
+            lastGridSignature = signature;
             return;
         }
-        
+
         // Reduce grid density when it's too fine
         if (ddx < 3 || ddy < 3) {
             // Less dots - multiply pitch by 5 to make grid sparser
@@ -956,33 +1094,48 @@ public class Graphics2DSwing implements GraphicsInterface, TextInterface
             // Use this as fallback when texture would be too large
             ColorSwing clrd = (ColorSwing) colorDots;
             g.setColor(clrd.getColorSwing());
-            
+
             double dd = 0;
             double d = 1;
-            
+
             // to avoid repeated transformations
             java.util.List<Double> xPositions = new java.util.ArrayList<>();
-            for (double x = cs.unmapXsnap(xmin); 
+            for (double x = cs.unmapXsnap(xmin);
                     x <= cs.unmapXsnap(xmax); x += dx) {
                 xPositions.add(x);
             }
-            
+
             java.util.List<Double> yPositions = new java.util.ArrayList<>();
-            for (double y = cs.unmapYsnap(ymin); 
+            for (double y = cs.unmapYsnap(ymin);
                     y <= cs.unmapYsnap(ymax); y += dy) {
                 yPositions.add(y);
             }
-            
-            // Draw grid dots using pre-calculated positions
+
+            // Pre-compute the final screen-space positions once: both
+            // the immediate draw below and any later cache-hit replay
+            // reuse this same array, avoiding repeated mapXr/mapYr calls.
+            int nDots = xPositions.size() * yPositions.size();
+            int[] xScreen = new int[nDots];
+            int[] yScreen = new int[nDots];
+            int idx = 0;
             for (Double x : xPositions) {
                 for (Double y : yPositions) {
-                    g.fillRect(
-                        (int)Math.round(cs.mapXr(x, y) - dd),
-                        (int)Math.round(cs.mapYr(x, y) - dd),
-                        (int)d, (int)d
-                    );
+                    xScreen[idx] = (int)Math.round(cs.mapXr(x, y) - dd);
+                    yScreen[idx] = (int)Math.round(cs.mapYr(x, y) - dd);
+                    ++idx;
                 }
             }
+
+            RenderingHints savedFallback = beginFastFill();
+            for (int i = 0; i < nDots; ++i) {
+                g.fillRect(xScreen[i], yScreen[i], (int)d, (int)d);
+            }
+            endFastFill(savedFallback);
+
+            lastGridMode = GRID_MODE_FALLBACK;
+            lastXDotsScreen = xScreen;
+            lastYDotsScreen = yScreen;
+            lastGridSignature = signature;
             return;
         }
 
@@ -994,9 +1147,14 @@ public class Graphics2DSwing implements GraphicsInterface, TextInterface
 
         // Apply the cached or newly created texture paint
         if (tp != null) {
+            RenderingHints savedTexture = beginFastFill();
             g.setPaint(tp);
             g.fillRect(0, 0, xmax, ymax);
+            endFastFill(savedTexture);
         }
+
+        lastGridMode = GRID_MODE_TEXTURE;
+        lastGridSignature = signature;
     }
 
     /** Clear the grid texture cache. 
@@ -1007,6 +1165,10 @@ public class Graphics2DSwing implements GraphicsInterface, TextInterface
         gridCache.clear();
         bufferedImage = null;
         tp = null;
+        // Invalidate the last-frame replay cache too, otherwise a stale
+        // signature match could try to replay a texture/coordinates that
+        // were just discarded.
+        lastGridSignature = null;
     }
 
     /** Get the current size of the grid cache.
