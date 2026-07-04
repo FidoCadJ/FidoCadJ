@@ -1,12 +1,17 @@
 name: Portable release builds
 
-# Builds self-contained "portable" packages for Windows and Linux using
-# jpackage: each package bundles its own Java runtime (built with jlink),
-# so end users do not need to install a JDK/JRE themselves.
+# Builds self-contained "portable" packages for Windows, Linux and macOS
+# using jpackage: each package bundles its own Java runtime (built with
+# jlink), so end users do not need to install a JDK/JRE themselves.
+#
+# The macOS packages are unsigned and not notarized (no Apple Developer
+# account is available), so end users will see a Gatekeeper warning on
+# first launch and need to right-click > Open (or clear the quarantine
+# attribute) to run them.
 #
 # Triggers:
 #  - pushing a tag matching "v*" (e.g. v0.24.8): builds and publishes a
-#    GitHub Release with the Windows/Linux archives attached.
+#    GitHub Release with the Windows/Linux/macOS archives attached.
 #  - manual run from the Actions tab (workflow_dispatch): builds the
 #    archives and uploads them as workflow artifacts, without publishing
 #    a release (useful to test the pipeline).
@@ -32,6 +37,10 @@ jobs:
             platform: windows
           - os: ubuntu-latest
             platform: linux
+          - os: macos-13
+            platform: macos-x64
+          - os: macos-14
+            platform: macos-arm64
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out repository
@@ -82,6 +91,19 @@ jobs:
           pip install --quiet pillow
           python -c "from PIL import Image; im = Image.open('icons/icona_fidocadj_512x512.png'); im.save('icon.ico', sizes=[(16,16),(32,32),(48,48),(64,64),(128,128),(256,256)])"
 
+      - name: Build macOS icon
+        if: startsWith(matrix.platform, 'macos')
+        shell: bash
+        run: |
+          mkdir icon.iconset
+          for size in 16 32 128 256 512; do
+            sips -z $size $size icons/icona_fidocadj_512x512.png \
+              --out icon.iconset/icon_${size}x${size}.png
+            sips -z $((size*2)) $((size*2)) icons/icona_fidocadj_512x512.png \
+              --out icon.iconset/icon_${size}x${size}@2x.png
+          done
+          iconutil -c icns icon.iconset -o icon.icns
+
       - name: Package portable app (Windows)
         if: matrix.platform == 'windows'
         shell: bash
@@ -114,6 +136,29 @@ jobs:
             --copyright "Davide Bucci, Manuel Finessi and many others" \
             --description "A multiplatform vector drawing software"
 
+      - name: Package portable app (macOS)
+        if: startsWith(matrix.platform, 'macos')
+        shell: bash
+        run: |
+          jpackage --type app-image \
+            --input jar \
+            --dest dist \
+            --name FidoCadJ \
+            --main-jar fidocadj.jar \
+            --main-class fidocadj.FidoMain \
+            --app-version "${{ steps.ver.outputs.app_version }}" \
+            --icon icon.icns \
+            --vendor "FidoCadJ Team" \
+            --copyright "Davide Bucci, Manuel Finessi and many others" \
+            --description "A multiplatform vector drawing software"
+
+      - name: Check macOS app bundle
+        if: startsWith(matrix.platform, 'macos')
+        shell: bash
+        run: |
+          test -x "dist/FidoCadJ.app/Contents/MacOS/FidoCadJ"
+          test -f "dist/FidoCadJ.app/Contents/Info.plist"
+
       - name: Archive portable package (Windows)
         if: matrix.platform == 'windows'
         shell: pwsh
@@ -125,6 +170,14 @@ jobs:
         shell: bash
         run: |
           tar czf "FidoCadJ-${{ steps.ver.outputs.version }}-linux-portable.tar.gz" -C dist FidoCadJ
+
+      - name: Archive portable package (macOS)
+        if: startsWith(matrix.platform, 'macos')
+        shell: bash
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent \
+            dist/FidoCadJ.app \
+            "FidoCadJ-${{ steps.ver.outputs.version }}-${{ matrix.platform }}-portable.zip"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
