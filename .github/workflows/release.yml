@@ -72,9 +72,19 @@ jobs:
             echo "Could not derive a numeric app-version from '$VERSION' (got '$APP_VERSION')" >&2
             exit 1
           fi
-          echo "Building version $VERSION (app-version: $APP_VERSION)"
+          # On macOS, jpackage maps --app-version to CFBundleShortVersionString,
+          # which rejects a leading zero component (e.g. "0.24.9"). Strip
+          # leading zero components for that platform only; the other
+          # platforms keep using APP_VERSION unchanged.
+          MAC_APP_VERSION="$APP_VERSION"
+          while [[ "$MAC_APP_VERSION" == 0.* ]]; do
+            MAC_APP_VERSION="${MAC_APP_VERSION#0.}"
+          done
+
+          echo "Building version $VERSION (app-version: $APP_VERSION, macOS app-version: $MAC_APP_VERSION)"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "app_version=$APP_VERSION" >> "$GITHUB_OUTPUT"
+          echo "mac_app_version=$MAC_APP_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Compile
         shell: bash
@@ -146,7 +156,7 @@ jobs:
             --name FidoCadJ \
             --main-jar fidocadj.jar \
             --main-class fidocadj.FidoMain \
-            --app-version "${{ steps.ver.outputs.app_version }}" \
+            --app-version "${{ steps.ver.outputs.mac_app_version }}" \
             --icon icon.icns \
             --vendor "FidoCadJ Team" \
             --copyright "Davide Bucci, Manuel Finessi and many others" \
