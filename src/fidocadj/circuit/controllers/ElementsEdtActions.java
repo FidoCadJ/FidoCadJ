@@ -483,7 +483,7 @@ public class ElementsEdtActions
         g.setColor(g.getColor().red());
         // The data here begins at index 1, due to the internal construction.
 
-        int mult=(int)Math.round(g.getScreenDensity()/112);
+        int mult=Math.round(g.getScreenDensity()/112);
         g.applyStroke(2.0f*mult,0);
 
         for(int i=1; i<=clickNumber; ++i) {

@@ -116,7 +116,7 @@ public class DecoratedText
 
     private float getSizeMultLevel()
     {
-        switch((int)Math.abs(exponentLevel)){
+        switch(Math.abs(exponentLevel)){
             case 0:
                 return 1f;
             case 1:

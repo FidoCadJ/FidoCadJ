@@ -80,6 +80,7 @@ public final class FidoFrame extends JFrame implements
                                             HasChangedListener,
                                             WindowFocusListener
 {
+    private static final long serialVersionUID = 1L;
     // Interface elements parts of FidoFrame
 
     // The circuit panel...

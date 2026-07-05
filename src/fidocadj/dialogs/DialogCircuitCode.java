@@ -41,6 +41,7 @@ import fidocadj.clipboard.TextTransfer;
 public final class DialogCircuitCode extends JDialog
     implements ComponentListener
 {
+    private static final long serialVersionUID = 1L;
     private static final int MIN_WIDTH=400;
     private static final int MIN_HEIGHT=350;
 

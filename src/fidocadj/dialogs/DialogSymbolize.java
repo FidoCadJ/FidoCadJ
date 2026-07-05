@@ -56,6 +56,7 @@ import fidocadj.dialogs.controls.TextPopupMenu;
 
 public final class DialogSymbolize extends MinimumSizeDialog
 {
+    private static final long serialVersionUID = 1L;
     final private JPanel parent;
     private DrawingModel drawingModel;
 
@@ -199,7 +200,7 @@ public final class DialogSymbolize extends MinimumSizeDialog
             @Override public void mouseReleased(MouseEvent e)
             {
                 // Toggle grid visibility, via the secondary mouse button
-                if (e.getButton()==e.BUTTON3) {
+                if (e.getButton()==MouseEvent.BUTTON3) {
                     grid = !grid;
                     cpanel.setGridVisibility(grid);
                     cpanel.repaint();

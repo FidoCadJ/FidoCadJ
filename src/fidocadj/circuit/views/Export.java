@@ -63,12 +63,12 @@ public class Export
 
         for (int i=0; i<drawingModel.getPrimitiveVector().size(); ++i) {
 
-            g = (GraphicPrimitive)drawingModel.getPrimitiveVector().get(i);
+            g = drawingModel.getPrimitiveVector().get(i);
 
             if(g.getLayer()==drawingModel.getDrawOnlyLayer() &&
                 !(g instanceof PrimitiveMacro))
             {
-                if(((LayerDesc)drawingModel.getLayers().get(
+                if((drawingModel.getLayers().get(
                         g.getLayer())).isVisible()|| exportInvisible)
                 {
                     g.export(exp, mp);
@@ -78,7 +78,7 @@ public class Export
                                             drawingModel.getDrawOnlyLayer());
                 ((PrimitiveMacro)g).setExportInvisible(exportInvisible);
 
-                if(((LayerDesc)drawingModel.getLayers().get(
+                if((drawingModel.getLayers().get(
                         g.getLayer())).isVisible() || exportInvisible)
                 {
                     g.export(exp, mp);
@@ -143,7 +143,7 @@ public class Export
                 if (g instanceof PrimitivePCBPad) {
                     ((PrimitivePCBPad)g).setDrawOnlyPads(true);
 
-                    if(((LayerDesc)drawingModel.getLayers()
+                    if((drawingModel.getLayers()
                             .get(g.getLayer())).isVisible() || exportInvisible)
                     {
                         g.export(exp, mp);
@@ -153,7 +153,7 @@ public class Export
                     // Uhm... not beautiful
                     ((PrimitiveMacro)g).setExportInvisible(exportInvisible);
                     ((PrimitiveMacro)g).setDrawOnlyPads(true);
-                    if(((LayerDesc)drawingModel.getLayers()
+                    if((drawingModel.getLayers()
                             .get(g.getLayer())).isVisible() || exportInvisible)
                     {
                         g.export(exp, mp);

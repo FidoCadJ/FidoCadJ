@@ -38,6 +38,7 @@ import fidocadj.dialogs.controls.DialogUtil;
 */
 public final class DialogAbout extends MinimumSizeDialog
 {
+    private static final long serialVersionUID = 1L;
     /** Standard constructor: it needs the parent frame.
         @param parent the dialog's parent
     */

@@ -212,8 +212,8 @@ public final class ExportGraphic
             java.util.List<LayerDesc> v=new Vector<LayerDesc>();
             for (int i=0; i<16;++i) {
                 v.add(new LayerDesc((new ColorSwing()).black(), // NOPMD
-                    ((LayerDesc)ol.get(i)).isVisible(),
-                    "B/W",((LayerDesc)ol.get(i)).getAlpha()));
+                    (ol.get(i)).isVisible(),
+                    "B/W",(ol.get(i)).getAlpha()));
             }
             pp.setLayers(v);
         }
@@ -241,7 +241,7 @@ public final class ExportGraphic
 
                 // Create a graphics contents on the buffered image
                 Graphics2D g2d =
-                    (Graphics2D)bufferedImage.createGraphics();
+                    bufferedImage.createGraphics();
 
                 if(antiAlias) {
                     g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,

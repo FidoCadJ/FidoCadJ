@@ -362,8 +362,8 @@ public final class PrimitivePolygon extends GraphicPrimitive
                 if (j+1<nn-1 && "FCJ".equals(tokens[j+1])) {
                     break;
                 }
-                x1 = (float)Float.parseFloat(tokens[j++]);
-                y1 = (float)Float.parseFloat(tokens[j++]);
+                x1 = Float.parseFloat(tokens[j++]);
+                y1 = Float.parseFloat(tokens[j++]);
                 ++i;
                 addPoint(x1,y1);
             }
@@ -430,7 +430,7 @@ public final class PrimitivePolygon extends GraphicPrimitive
         int i=super.setControls(v);
         ParameterDescription pd;
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         // Check, just for sure...
         if (pd.parameter instanceof Boolean) {
@@ -439,7 +439,7 @@ public final class PrimitivePolygon extends GraphicPrimitive
             System.out.println("Warning: unexpected parameter!"+pd);
         }
 
-        pd=(ParameterDescription)v.get(i++);
+        pd=v.get(i++);
         if (pd.parameter instanceof DashInfo) {
             dashStyle=((DashInfo)pd.parameter).style;
         } else {

@@ -39,6 +39,7 @@ import fidocadj.dialogs.controls.TextPopupMenu;
 */
 public final class DialogEditLayer extends MinimumSizeDialog
 {
+    private static final long serialVersionUID = 1L;
     static final int ALPHA_MIN = 0;
     static final int ALPHA_MAX = 100;
 

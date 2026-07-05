@@ -306,7 +306,7 @@ public final class PrimitivePCBPad extends GraphicPrimitive
         int i=super.setControls(v);
         ParameterDescription pd;
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         // Check, just for sure...
         if (pd.parameter instanceof Float) {
@@ -315,7 +315,7 @@ public final class PrimitivePCBPad extends GraphicPrimitive
             System.out.println("Warning: unexpected parameter!"+pd);
         }
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         // Check, just for sure...
         if (pd.parameter instanceof Float) {
@@ -324,7 +324,7 @@ public final class PrimitivePCBPad extends GraphicPrimitive
             System.out.println("Warning: unexpected parameter!"+pd);
         }
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         // Check, just for sure...
         if (pd.parameter instanceof Float) {
@@ -332,7 +332,7 @@ public final class PrimitivePCBPad extends GraphicPrimitive
         } else {
             System.out.println("Warning: unexpected parameter!"+pd);
         }
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         // Check, just for sure...
         if (pd.parameter instanceof Integer) {

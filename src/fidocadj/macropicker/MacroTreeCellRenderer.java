@@ -32,6 +32,7 @@ import fidocadj.macropicker.model.MacroTreeNode;
 */
 public class MacroTreeCellRenderer extends DefaultTreeCellRenderer
 {
+    private static final long serialVersionUID = 1L;
     /** Create a component able to generate a rendered apt to show the
         elements in the Macro Tree.
         In our version, the value is checked and if it is an instance of

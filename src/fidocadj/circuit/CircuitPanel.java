@@ -74,6 +74,7 @@ public class CircuitPanel extends JPanel implements ChangeSelectedLayer,
                                                     ChangeSelectionListener,
                                                     PrimitivesParInterface
 {
+    private static final long serialVersionUID = 1L;
 
     // *********** DRAWING ***********
     Graphics2DSwing graphicSwing;
@@ -1129,7 +1130,7 @@ public class CircuitPanel extends JPanel implements ChangeSelectedLayer,
                     }
                 } else {
                     ParameterDescription pd
-                                         = (ParameterDescription) v.get(0);
+                                         = v.get(0);
                     if (pd.parameter instanceof LayerInfo layerInfo) {
                         int l = layerInfo.getLayer();
                         editorActions.setLayerForSelectedPrimitives(l);

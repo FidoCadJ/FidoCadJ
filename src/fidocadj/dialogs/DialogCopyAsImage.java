@@ -43,6 +43,7 @@ import fidocadj.dialogs.controls.TextPopupMenu;
 public final class DialogCopyAsImage extends MinimumSizeDialog implements
     ActionListener
 {
+    private static final long serialVersionUID = 1L;
     private boolean copy;     // Indicates that the copy should be done
 
     private static final double EPS=1E-5;   // Resolution comparison precision

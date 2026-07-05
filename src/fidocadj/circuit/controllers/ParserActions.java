@@ -237,7 +237,7 @@ public class ParserActions
             StandardLayers.createStandardLayers();
 
         for(int i=0; i<layerV.size();++i) {
-            LayerDesc l = (LayerDesc)layerV.get(i);
+            LayerDesc l = layerV.get(i);
 
             if (l.isModified()) {
                 int rgb=l.getColor().getRGB();
@@ -247,7 +247,7 @@ public class ParserActions
                 // If the name has been modified, the name configuration
                 // is also saved.
                 String defaultName=
-                    ((LayerDesc)standardLayers.get(i)).getDescription();
+                    (standardLayers.get(i)).getDescription();
                 if (!l.getDescription().equals(defaultName)) {
                     s.append("FJC N "+i+" "+l.getDescription()+"\n");
                 }
@@ -725,7 +725,7 @@ public class ParserActions
             if (layerNum>=0&&layerNum<layerV.size()) {
                 int rgb=Integer.parseInt(tokens[3]);
                 float alpha=Float.parseFloat(tokens[4]);
-                LayerDesc ll=(LayerDesc)layerV.get(layerNum);
+                LayerDesc ll=layerV.get(layerNum);
                 ll.getColor().setRGB(rgb);
                 ll.setAlpha(alpha);
                 ll.setModified(true);
@@ -744,7 +744,7 @@ public class ParserActions
                 }
 
                 lName=temp.toString();
-                LayerDesc ll=(LayerDesc)layerV.get(layerNum);
+                LayerDesc ll=layerV.get(layerNum);
                 ll.setDescription(lName);
                 ll.setModified(true);
             }
@@ -753,7 +753,7 @@ public class ParserActions
             // Layer locked state
             int layerNum = Integer.parseInt(tokens[2]);
             if (layerNum>=0&&layerNum<layerV.size()) {
-                LayerDesc ll=(LayerDesc)layerV.get(layerNum);
+                LayerDesc ll=layerV.get(layerNum);
                 ll.setLocked(Boolean.parseBoolean(tokens[3]));
                 ll.setModified(true);
             }

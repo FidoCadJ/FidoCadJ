@@ -41,6 +41,7 @@ import fidocadj.dialogs.controls.DialogUtil;
 public final class DialogLayer extends MinimumSizeDialog
     implements ComponentListener
 {
+    private static final long serialVersionUID = 1L;
     private final java.util.List<LayerDesc> layers;
     public JList<LayerDesc> layerList;
 
@@ -169,7 +170,7 @@ public final class DialogLayer extends MinimumSizeDialog
     {
         if (index>=0) {
             DialogEditLayer del=new DialogEditLayer(null,
-                (LayerDesc) layers.get(layerList.getSelectedIndex()));
+                layers.get(layerList.getSelectedIndex()));
             del.setVisible(true);
             if (del.getActive()){
                 del.acceptLayer();

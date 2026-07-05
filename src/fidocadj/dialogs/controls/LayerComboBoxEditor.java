@@ -56,6 +56,7 @@ import fidocadj.globals.Globals;
 public final class LayerComboBoxEditor extends AbstractCellEditor implements
                                                             ComboBoxEditor
 {
+    private static final long serialVersionUID = 1L;
     private final JPanel panel;
     private JLabel colorLabel;
     private JLabel visibilityLabel;

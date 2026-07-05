@@ -40,6 +40,7 @@ import fidocadj.globals.Globals;
 public final class LayerCellRenderer extends JPanel implements
                                                 ListCellRenderer<LayerDesc>
 {
+    private static final long serialVersionUID = 1L;
     private final JLabel colorLabel;
     private final JLabel visibilityLabel;
     private final JLabel lockLabel;

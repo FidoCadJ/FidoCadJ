@@ -34,6 +34,7 @@ import java.awt.*;
 */
 public final class OriginCircuitPanel extends CircuitPanel
 {
+    private static final long serialVersionUID = 1L;
     final float dash1[] = {2.0f};
     final BasicStroke dashed = new BasicStroke(1.0f,
                             BasicStroke.CAP_BUTT,

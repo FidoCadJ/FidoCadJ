@@ -53,6 +53,7 @@ import fidocadj.graphic.FontG;
  */
 public final class DialogParameters extends JDialog
 {
+    private static final long serialVersionUID = 1L;
     //private int minWidth = 450;
     //private int minHeight = 350;
     private static final int MAX = 20;

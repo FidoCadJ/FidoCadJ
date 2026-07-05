@@ -56,6 +56,7 @@ import fidocadj.primitives.MacroDesc;
 */
 public class MacroTree extends JPanel
 {
+    private static final long serialVersionUID = 1L;
     /** Indicates library */
     public static final int LIBRARY = 0;
     /** Indicates category */

@@ -27,6 +27,7 @@ import java.awt.event.*;
 */
 public class MinimumSizeDialog extends JDialog implements ComponentListener
 {
+    private static final long serialVersionUID = 1L;
     // The minimum size in pixels.
     private final int minWidth;
     private final int minHeight;

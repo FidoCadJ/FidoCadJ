@@ -153,8 +153,8 @@ public final class ExportSVG implements ExportInterface, TextInterface
         out = new BufferedWriter(fstream);
         //numberPath=0;
 
-        int wi=(int)totalSize.width;
-        int he=(int)totalSize.height;
+        int wi=totalSize.width;
+        int he=totalSize.height;
 
         // A dumb, basic header of the SVG file
 
@@ -221,7 +221,7 @@ public final class ExportSVG implements ExportInterface, TextInterface
         if((int)(sizey/sizex) == 10/7){
             yscale = 1.0;
         } else {
-            yscale=(double)sizey/(double)sizex*22.0/40.0;
+            yscale=sizey/sizex*22.0/40.0;
         }
         double xscale = isMirrored ? -1 : 1;
 
@@ -852,7 +852,7 @@ public final class ExportSVG implements ExportInterface, TextInterface
         if (x==xc) {
             alpha = Math.PI/2.0+(y-yc<0.0?0.0:Math.PI);
         } else {
-            alpha = Math.atan((double)(y-yc)/(double)(x-xc));
+            alpha = Math.atan((y-yc)/(x-xc));
         }
 
         alpha += x-xc>0.0?0.0:Math.PI;

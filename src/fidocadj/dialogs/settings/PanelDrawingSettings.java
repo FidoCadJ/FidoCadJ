@@ -36,6 +36,7 @@ import fidocadj.globals.SettingsManager;
  */
 public class PanelDrawingSettings extends JPanel implements SettingsPanel
 {
+    private static final long serialVersionUID = 1L;
     private JTextField gridWidthField;
     private JTextField connectionSizeField;
     private JTextField strokeSizeStraightField;

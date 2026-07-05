@@ -40,6 +40,7 @@ import fidocadj.primitives.MacroDesc;
 public class MacroTreePopupMenu extends JPopupMenu implements
             ChangeListener
 {
+    private static final long serialVersionUID = 1L;
     final private MacroTree macroTree;
 
     // Element employed to check the kind of actions which can be done on

@@ -355,8 +355,8 @@ public class PrintTools implements Printable
 
         // Calculate how many pages are needed in the horisontal and in the
         // vertical dimensions. The printout will be organized as a mosaic.
-        int npagesx = (int)Math.ceil(imageWidth/(double)shownWidth);
-        int npagesy = (int)Math.ceil(imageHeight/(double)shownHeight);
+        int npagesx = (int)Math.ceil(imageWidth/shownWidth);
+        int npagesy = (int)Math.ceil(imageHeight/shownHeight);
         // Calculate the total number of pages.
         int npages=npagesx*npagesy;
 
@@ -394,8 +394,8 @@ public class PrintTools implements Printable
 
             for (int i=0; i<LayerDesc.MAX_LAYERS;++i) {
                 v.add(new LayerDesc(new ColorSwing(Color.black),
-                    ((LayerDesc)ol.get(i)).isVisible(),
-                     "B/W",((LayerDesc)ol.get(i)).getAlpha()));
+                    (ol.get(i)).isVisible(),
+                     "B/W",(ol.get(i)).getAlpha()));
             }
             cc.getDrawingModel().setLayers(v);
         }

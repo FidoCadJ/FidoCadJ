@@ -298,7 +298,7 @@ public final class PrimitiveImage extends GraphicPrimitive
         int i=super.setControls(v);
         ParameterDescription pd;
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         if (pd.parameter instanceof Float) {
             opacity=((Float)pd.parameter).floatValue();
@@ -306,7 +306,7 @@ public final class PrimitiveImage extends GraphicPrimitive
             System.out.println("Warning: unexpected parameter!"+pd);
         }
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         if (pd.parameter instanceof Boolean) {
             blackAndWhite=((Boolean)pd.parameter).booleanValue();

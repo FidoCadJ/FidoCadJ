@@ -42,6 +42,7 @@ import fidocadj.dialogs.controls.TextPopupMenu;
 public final class DialogExport extends MinimumSizeDialog
     implements ActionListener
 {
+    private static final long serialVersionUID = 1L;
     private final JFrame parent;
 
     private boolean export;     // Indicates that the export should be done

@@ -92,7 +92,7 @@ public abstract class AbstractMacroTreeNode implements MacroTreeNode
     */
     public TreeNode getParent()
     {
-        return (TreeNode)parent;
+        return parent;
     }
 
     /** Set the parent node.

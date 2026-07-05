@@ -45,6 +45,7 @@ import fidocadj.layers.LayerDesc;
 
 public final class DialogPrint extends MinimumSizeDialog
 {
+    private static final long serialVersionUID = 1L;
     private final JCheckBox mirror_CB;
     private final JCheckBox fit_CB;
     private final JCheckBox bw_CB;

@@ -242,7 +242,7 @@ public class Graphics2DSwing implements GraphicsInterface, TextInterface
 
         // Here we retrieve the stroke style corresponding to the given
         // dashStyle
-        BasicStroke stroke=(BasicStroke)strokeList[dashStyle];
+        BasicStroke stroke=strokeList[dashStyle];
 
         // Apparently, on some systems (like my iMac G5 with MacOSX 10.4.11)
         // setting the stroke takes a lot of time!

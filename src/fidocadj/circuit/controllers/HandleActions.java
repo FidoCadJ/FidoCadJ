@@ -204,14 +204,14 @@ public class HandleActions
         // Performs a cycle through all primitives and check their
         // distance.
         for (i=0; i<drawingModel.getPrimitiveVector().size(); ++i){
-            gp=(GraphicPrimitive)drawingModel.getPrimitiveVector().get(i);
+            gp=drawingModel.getPrimitiveVector().get(i);
             layer= gp.getLayer();
 
             // Does not allow for selecting an invisible or locked
             // primitive.
             if(layer<layerV.size() &&
-                (!((LayerDesc)layerV.get(layer)).isVisible() ||
-                    ((LayerDesc)layerV.get(layer)).isLocked()) &&
+                (!(layerV.get(layer)).isVisible() ||
+                    (layerV.get(layer)).isLocked()) &&
                 !(gp instanceof PrimitiveMacro))
             {
                 continue;
@@ -235,7 +235,7 @@ public class HandleActions
         // Verify if the whole primitive should be drag
         if (mindistance<sptol && handleBeingDragged<0){
             primBeingDragged=
-                (GraphicPrimitive)drawingModel.getPrimitiveVector().get(isel);
+                drawingModel.getPrimitiveVector().get(isel);
             if (!multiple && !primBeingDragged.isSelected()) {
                 selectionActions.setSelectionAll(false);
             }

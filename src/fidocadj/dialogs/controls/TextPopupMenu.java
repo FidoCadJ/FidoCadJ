@@ -35,6 +35,7 @@ import javax.swing.text.JTextComponent;
  */
 public class TextPopupMenu extends JPopupMenu
 {
+    private static final long serialVersionUID = 1L;
 
     private TextPopupMenu()
     {

@@ -41,6 +41,7 @@ import fidocadj.globals.SettingsManager;
  */
 public class PanelThemeSettings extends JPanel implements SettingsPanel
 {
+    private static final long serialVersionUID = 1L;
     private JRadioButton lightThemeRadioButton;
     private JRadioButton darkThemeRadioButton;
     private JCheckBox personalizedThemeCheckBox;

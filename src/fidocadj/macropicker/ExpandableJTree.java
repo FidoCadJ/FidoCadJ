@@ -33,6 +33,7 @@ import java.awt.*;
 */
 public final class ExpandableJTree extends JTree
 {
+    private static final long serialVersionUID = 1L;
     // runOnce = true means that a change in the expansion state of the tree
     // has been requested and it should be taken into account during the next
     // painting event.

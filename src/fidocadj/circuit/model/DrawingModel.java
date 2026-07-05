@@ -229,7 +229,7 @@ public final class DrawingModel
 
         // TODO: not very elegant piece of code.
         // Basically, we grab the settings of the very first object stored.
-        float size=((GraphicPrimitive)getPrimitiveVector().get(0))
+        float size=(getPrimitiveVector().get(0))
                    .getMacroFontSize();
 
         if(size<=0) { size=1; }
@@ -260,15 +260,15 @@ public final class DrawingModel
         for(l = getPrimitiveVector().size()/2; l>0; l/=2) {
             for(j = l; j< getPrimitiveVector().size(); ++j) {
                 for(i=j-l; i>=0; i-=l) {
-                    if(((GraphicPrimitive)getPrimitiveVector()
+                    if((getPrimitiveVector()
                                                     .get(i+l)).getLayer()>=
-                        ((GraphicPrimitive)getPrimitiveVector()
+                        (getPrimitiveVector()
                                                     .get(i)).getLayer())
                     {
                         break;
                     } else {
                         // Swap
-                        s = (GraphicPrimitive)getPrimitiveVector().get(i);
+                        s = getPrimitiveVector().get(i);
                         getPrimitiveVector().set(i,
                             getPrimitiveVector().get(i+l));
                         getPrimitiveVector().set(i+l, s);
@@ -287,7 +287,7 @@ public final class DrawingModel
             layersUsed[l] = false;
 
             for (i=k; i<getPrimitiveVector().size(); ++i) {
-                g=(GraphicPrimitive)getPrimitiveVector().get(i);
+                g=getPrimitiveVector().get(i);
 
                 // We keep track of the maximum layer number used in the
                 // drawing.

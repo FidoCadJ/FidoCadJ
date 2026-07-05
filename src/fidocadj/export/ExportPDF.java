@@ -874,7 +874,7 @@ public final class ExportPDF implements ExportInterface, TextInterface
         if((int)(sizey/sizex) == 10/7){
             ratio = 1.0;
         } else {
-            ratio=(double)sizey/(double)sizex*22.0/40.0;
+            ratio=sizey/sizex*22.0/40.0;
         }
         outt.write("  1 0 0 "+Globals.roundTo(ratio)+ " 0 "+
                 (-ys*ratio*0.8)+" cm\n");
@@ -1491,7 +1491,7 @@ public final class ExportPDF implements ExportInterface, TextInterface
         if (x==xc) {
             alpha = Math.PI/2.0+(y-yc<0.0?0.0:Math.PI);
         } else {
-            alpha = Math.atan((double)(y-yc)/(double)(x-xc));
+            alpha = Math.atan((y-yc)/(x-xc));
         }
         alpha += x-xc>0.0?0.0:Math.PI;
 

@@ -42,6 +42,7 @@ import javax.swing.UIManager;
 */
 public final class OSKeybPanel extends JPanel
 {
+    private static final long serialVersionUID = 1L;
 
     String symbols =
         "\u0391\u0392\u0393\u0394\u0395\u0396\u0397\u0398\u0399\u039A"
@@ -93,7 +94,7 @@ public final class OSKeybPanel extends JPanel
 
             @Override public void actionPerformed(ActionEvent e)
             {
-                JDialog jd = (JDialog) txt;
+                JDialog jd = txt;
                 // We must find a target for the results of the keyboard
                 // actions.
                 if (!(jd.getMostRecentFocusOwner() instanceof JTextField)) {

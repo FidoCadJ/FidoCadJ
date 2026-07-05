@@ -329,7 +329,7 @@ public class MacroTreeModel implements TreeModel,LibraryListener
         if(renamedNode==null) {
             fireTreeNodeChanged(new TreePath(rootNode));
         } else {
-            for(TreePath path:(Set<TreePath>)libraryNodeMap.keySet()){
+            for(TreePath path:libraryNodeMap.keySet()){
                 if(path.getLastPathComponent().equals(renamedNode)){
                     renamedMacroTreeNode = (TreeNode)libraryNodeMap.get(path);
                     renamedPath = createAbsolutePath(renamedMacroTreeNode);
@@ -355,7 +355,7 @@ public class MacroTreeModel implements TreeModel,LibraryListener
         if(parentNode==null) {
             fireTreeStructureChanged(new TreePath(rootNode));
         } else {
-            for(TreePath path:(Set<TreePath>)libraryNodeMap.keySet()){
+            for(TreePath path:libraryNodeMap.keySet()){
                 if(path.getLastPathComponent().equals(parentNode)){
                     parentMacroTreeNode = (TreeNode)libraryNodeMap.get(path);
                     parentPath = createAbsolutePath(parentMacroTreeNode);
@@ -381,7 +381,7 @@ public class MacroTreeModel implements TreeModel,LibraryListener
         if(parentNode==null) {
             fireTreeStructureChanged(new TreePath(rootNode));
         } else {
-            for(TreePath path:(Set<TreePath>)libraryNodeMap.keySet()){
+            for(TreePath path:libraryNodeMap.keySet()){
                 if(path.getLastPathComponent().equals(parentNode)){
                     parentMacroTreeNode = (TreeNode)libraryNodeMap.get(path);
                     parentPath = createAbsolutePath(parentMacroTreeNode);

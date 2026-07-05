@@ -35,6 +35,7 @@ import java.awt.event.MouseEvent;
  */
 public class ColorPicker extends JPanel
 {
+    private static final long serialVersionUID = 1L;
     private Color color;
     private final Border border =
                     BorderFactory.createEtchedBorder(EtchedBorder.RAISED);

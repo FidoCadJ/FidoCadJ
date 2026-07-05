@@ -165,7 +165,7 @@ public class MapCoordinates
             System.out.println("Warning: I can not pop the coordinate state "+
                 "out of an empty stack!");
         } else {
-            MapCoordinates m=(MapCoordinates) stack.removeFirst();
+            MapCoordinates m=stack.removeFirst();
             xCenter=m.xCenter;
             yCenter=m.yCenter;
             xMagnitude=m.xMagnitude;
@@ -486,7 +486,7 @@ public class MapCoordinates
                 }
             }
         } else {
-            vx=(double)xc*xMagnitude;
+            vx=xc*xMagnitude;
         }
         return vx+xCenter;
     }
@@ -557,7 +557,7 @@ public class MapCoordinates
                     break;
             }
         } else {
-            vy=(double)yc*yMagnitude;
+            vy=yc*yMagnitude;
         }
 
         return vy+yCenter;

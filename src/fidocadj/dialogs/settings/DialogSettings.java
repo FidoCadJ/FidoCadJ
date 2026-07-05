@@ -37,6 +37,7 @@ import fidocadj.globals.Globals;
 
 public class DialogSettings extends MinimumSizeDialog
 {
+    private static final long serialVersionUID = 1L;
     private final PanelGeneralSettings panelGeneralSettings;
     private final PanelDrawingSettings panelDrawingSettings;
     private final PanelPCBSettings panelPCBSettings;

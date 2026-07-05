@@ -157,7 +157,7 @@ public final class PrimitiveMacro extends GraphicPrimitive
         name=na;
         value=va;
 
-        MacroDesc macro=(MacroDesc)library.get(key);
+        MacroDesc macro=library.get(key);
 
         // Check if the macro description is contained in the database
         // containing all the libraries.
@@ -359,7 +359,7 @@ public final class PrimitiveMacro extends GraphicPrimitive
             macroName=macroName.toLowerCase(Locale.forLanguageTag("en"));
 
             // Let's see if the macro is recognized and store it.
-            MacroDesc macro=(MacroDesc)library.get(macroName);
+            MacroDesc macro=library.get(macroName);
 
             if (macro==null){
                 throw new IOException("Unrecognized macro '"
@@ -617,7 +617,7 @@ public final class PrimitiveMacro extends GraphicPrimitive
 
         changed=true;
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         // Check, just for sure...
         if (pd.parameter instanceof String) {
@@ -626,7 +626,7 @@ public final class PrimitiveMacro extends GraphicPrimitive
             System.out.println("Warning: unexpected parameter!"+pd);
         }
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         // Check, just for sure...
         if (pd.parameter instanceof String) {

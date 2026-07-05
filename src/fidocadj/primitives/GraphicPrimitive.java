@@ -820,8 +820,8 @@ public abstract class GraphicPrimitive
         // Calculation of the reasonable multiplication factor.
         mult=g.getScreenDensity()/BASE_RESOLUTION;
 
-        int sizeX=(int)Math.round(mult*HANDLE_WIDTH);
-        int sizeY=(int)Math.round(mult*HANDLE_WIDTH);
+        int sizeX=Math.round(mult*HANDLE_WIDTH);
+        int sizeY=Math.round(mult*HANDLE_WIDTH);
 
         for(int i=0;i<getControlPointNumber();++i) {
             if (!testIfValidHandle(i)) {
@@ -855,8 +855,8 @@ public abstract class GraphicPrimitive
         int ya;
 
         int increase = 5;
-        int hw2=(int)Math.round(mult*HANDLE_WIDTH/2);
-        int hl2=(int)Math.round(mult*HANDLE_WIDTH/2);
+        int hw2=Math.round(mult*HANDLE_WIDTH/2);
+        int hl2=Math.round(mult*HANDLE_WIDTH/2);
 
         for(int i=0;i<getControlPointNumber();++i) {
             if (!testIfValidHandle(i)) {
@@ -870,10 +870,10 @@ public abstract class GraphicPrimitive
             // if the point lies inside the rectangle given by the handle.
 
             if(GeometricDistances.pointInRectangle(
-                xa-hw2-(int)Math.round(mult*increase),
-                ya-hl2-(int)Math.round(mult*increase),
-                (int)Math.round(mult*(HANDLE_WIDTH+2*increase)),
-                (int)Math.round(mult*(HANDLE_WIDTH+2*increase)),
+                xa-hw2-Math.round(mult*increase),
+                ya-hl2-Math.round(mult*increase),
+                Math.round(mult*(HANDLE_WIDTH+2*increase)),
+                Math.round(mult*(HANDLE_WIDTH+2*increase)),
                 px,py))
             {
                 return i;
@@ -1006,7 +1006,7 @@ public abstract class GraphicPrimitive
         ParameterDescription pd;
         changed=true;
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         // Check, just for sure...
         if (pd.parameter instanceof String) {
@@ -1015,7 +1015,7 @@ public abstract class GraphicPrimitive
             System.out.println("Warning: unexpected parameter!"+pd);
         }
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         // Check, just for sure...
         if (pd.parameter instanceof String) {
@@ -1024,7 +1024,7 @@ public abstract class GraphicPrimitive
             System.out.println("Warning: unexpected parameter!"+pd);
         }
 
-        pd = (ParameterDescription)v.get(i);
+        pd = v.get(i);
         // Check, just for sure...
         if (pd.parameter instanceof LayerInfo) {
             layer=((LayerInfo)pd.parameter).getLayer();
@@ -1191,7 +1191,7 @@ public abstract class GraphicPrimitive
             int w=(int)Math.round(v);
             sb = new StringBuffer(""+w);
         } else {
-            long w=(long)Math.round(v*100);
+            long w=Math.round(v*100);
             sb = new StringBuffer(""+((float)w)/100);
         }
         return sb;

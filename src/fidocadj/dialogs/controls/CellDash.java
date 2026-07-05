@@ -34,6 +34,7 @@ import fidocadj.globals.Globals;
 */
 public class CellDash extends JPanel
 {
+    private static final long serialVersionUID = 1L;
     private final boolean isSelected;
     private final DashInfo dash;
     private final JList list;

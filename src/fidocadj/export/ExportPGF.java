@@ -418,7 +418,7 @@ public final class ExportPGF implements ExportInterface
         if (x==xc) {
             alpha = Math.PI/2.0+(y-yc<0?0:Math.PI);
         } else {
-            alpha = Math.atan((double)(y-yc)/(double)(x-xc));
+            alpha = Math.atan((y-yc)/(x-xc));
         }
 
         alpha += x-xc>0?0:Math.PI;

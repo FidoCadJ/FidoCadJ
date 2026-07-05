@@ -42,6 +42,7 @@ import fidocadj.dialogs.controls.TextPopupMenu;
 
 public final class DialogAttachImage extends MinimumSizeDialog
 {
+    private static final long serialVersionUID = 1L;
     private final JFrame parent;        // Parent window
     private final JTextField fileName;      // File name text field
     private final JTextField resolution;    // Resolution text field

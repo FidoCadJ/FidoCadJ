@@ -58,6 +58,7 @@ import fidocadj.globals.SettingsManager;
 public final class ToolbarTools extends JToolBar
     implements ChangeSelectionListener
 {
+    private static final long serialVersionUID = 1L;
     private ChangeSelectionListener selectionListener;
 
     //Instance variable of each button
@@ -188,7 +189,7 @@ public final class ToolbarTools extends JToolBar
             @Override public void actionPerformed(ActionEvent ev)
             {
                 Integer circuitPanelConstantInteger =
-                    (Integer)circuitPanelConstants.get(selection);
+                    circuitPanelConstants.get(selection);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -207,8 +208,7 @@ public final class ToolbarTools extends JToolBar
         zoom.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(zoom);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(zoom);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -226,8 +226,7 @@ public final class ToolbarTools extends JToolBar
         hand.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(hand);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(hand);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -245,8 +244,7 @@ public final class ToolbarTools extends JToolBar
         line.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(line);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(line);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -264,8 +262,7 @@ public final class ToolbarTools extends JToolBar
         advtext.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(advtext);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(advtext);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -283,8 +280,7 @@ public final class ToolbarTools extends JToolBar
         bezier.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(bezier);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(bezier);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -302,8 +298,7 @@ public final class ToolbarTools extends JToolBar
         polygon.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(polygon);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(polygon);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -323,8 +318,7 @@ public final class ToolbarTools extends JToolBar
         complexcurve.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(complexcurve);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(complexcurve);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -342,8 +336,7 @@ public final class ToolbarTools extends JToolBar
         ellipse.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(ellipse);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(ellipse);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -361,8 +354,7 @@ public final class ToolbarTools extends JToolBar
         rectangle.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(rectangle);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(rectangle);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -380,8 +372,7 @@ public final class ToolbarTools extends JToolBar
         connection.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(connection);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(connection);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -399,8 +390,7 @@ public final class ToolbarTools extends JToolBar
         pcbline.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(pcbline);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(pcbline);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -418,8 +408,7 @@ public final class ToolbarTools extends JToolBar
         pcbpad.addActionListener(new ActionListener() {
             @Override public void actionPerformed(ActionEvent ev)
             {
-                Integer circuitPanelConstantInteger = (Integer)
-                    circuitPanelConstants.get(pcbpad);
+                Integer circuitPanelConstantInteger =                     circuitPanelConstants.get(pcbpad);
                 int circuitPanelConstant = circuitPanelConstantInteger
                     .intValue();
                 selectionListener.
@@ -511,7 +500,7 @@ public final class ToolbarTools extends JToolBar
             return ElementsEdtActions.NONE;
         } else {
             Integer circuitPanelConstantInteger =
-                (Integer)circuitPanelConstants.get(selectedButton);
+                circuitPanelConstants.get(selectedButton);
             return circuitPanelConstantInteger.intValue();
         }
     }
@@ -539,7 +528,7 @@ public final class ToolbarTools extends JToolBar
                 break;
             }
             Integer circuitPanelConstantInteger =
-                (Integer)circuitPanelConstants.get(button);
+                circuitPanelConstants.get(button);
             int circuitPanelConstant = circuitPanelConstantInteger.intValue();
             if(s == circuitPanelConstant) {
                 button.setSelected(true);

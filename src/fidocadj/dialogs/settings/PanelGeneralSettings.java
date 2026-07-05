@@ -38,6 +38,7 @@ import fidocadj.globals.SettingsManager;
  */
 public final class PanelGeneralSettings extends JPanel implements SettingsPanel
 {
+    private static final long serialVersionUID = 1L;
     private JTextField libDirectoryField;
     private JCheckBox textToolbarCheckBox;
     private JCheckBox smallIconsCheckBox;

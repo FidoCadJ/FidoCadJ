@@ -35,6 +35,7 @@ import fidocadj.graphic.swing.Graphics2DSwing;
 */
 public class CellArrow extends JPanel
 {
+    private static final long serialVersionUID = 1L;
     private final boolean isSelected;
     private final ArrowInfo arrow;
     private final JList list;

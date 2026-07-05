@@ -813,7 +813,7 @@ public final class PrimitiveComplexCurve
         int i=super.setControls(v);
         ParameterDescription pd;
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         // Check, just for sure...
         if (pd.parameter instanceof Boolean) {
@@ -822,7 +822,7 @@ public final class PrimitiveComplexCurve
             System.out.println("Warning: unexpected parameter!"+pd);
         }
 
-        pd=(ParameterDescription)v.get(i++);
+        pd=v.get(i++);
         // Check, just for sure...
         if (pd.parameter instanceof Boolean) {
             isClosed=((Boolean)pd.parameter).booleanValue();
@@ -832,7 +832,7 @@ public final class PrimitiveComplexCurve
 
         i=arrowData.setParametersForArrow(v, i);
 
-        pd=(ParameterDescription)v.get(i++);
+        pd=v.get(i++);
         if (pd.parameter instanceof DashInfo) {
             dashStyle=((DashInfo)pd.parameter).style;
         } else {

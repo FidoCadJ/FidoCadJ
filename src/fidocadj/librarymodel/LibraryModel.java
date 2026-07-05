@@ -700,6 +700,7 @@ public class LibraryModel
     */
     public class LibraryException extends Exception
     {
+        private static final long serialVersionUID = 1L;
         LibraryException(String message)
         {
             super(message);
@@ -711,6 +712,7 @@ public class LibraryModel
     */
     public class IllegalNameException extends LibraryException
     {
+        private static final long serialVersionUID = 1L;
         IllegalNameException(String message)
         {
             super(message);
@@ -723,6 +725,7 @@ public class LibraryModel
     */
     public class IllegalLibraryAccessException extends LibraryException
     {
+        private static final long serialVersionUID = 1L;
         IllegalLibraryAccessException(String message)
         {
             super(message);
@@ -734,6 +737,7 @@ public class LibraryModel
     */
     public class IllegalKeyException extends LibraryException
     {
+        private static final long serialVersionUID = 1L;
         IllegalKeyException(String message)
         {
             super(message);

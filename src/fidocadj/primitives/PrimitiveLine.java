@@ -161,7 +161,7 @@ public final class PrimitiveLine extends GraphicPrimitive
         int i=super.setControls(v);
         i=arrowData.setParametersForArrow(v, i);
 
-        ParameterDescription pd=(ParameterDescription)v.get(i++);
+        ParameterDescription pd=v.get(i++);
         if (pd.parameter instanceof DashInfo) {
             dashStyle=((DashInfo)pd.parameter).style;
         } else {

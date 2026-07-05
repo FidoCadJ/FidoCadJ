@@ -100,13 +100,13 @@ public final class Arrow
         result+=arrows+" ";
         result+=arrowStyle+" ";
         if (Math.abs(arrowLength-Math.round(arrowLength))<roundTolerance) {
-            result+= (int)Math.round(arrowLength);
+            result+= Math.round(arrowLength);
         } else {
             result+=arrowLength;
         }
         result+=" ";
         if (Math.abs(arrowHalfWidth-Math.round(arrowHalfWidth))<roundTolerance){
-            result+= (int)Math.round(arrowHalfWidth);
+            result+= Math.round(arrowHalfWidth);
         } else {
             result+=arrowHalfWidth;
         }
@@ -298,34 +298,34 @@ public final class Arrow
     public int setParametersForArrow(List<ParameterDescription> v, int start)
     {
         int i=start;
-        ParameterDescription pd=(ParameterDescription)v.get(i++);
+        ParameterDescription pd=v.get(i++);
         if (pd.parameter instanceof Boolean) {
             setArrowStart(((Boolean)pd.parameter).booleanValue());
         } else {
             System.out.println("Warning: 1-unexpected parameter!"+pd);
         }
-        pd=(ParameterDescription)v.get(i++);
+        pd=v.get(i++);
         if (pd.parameter instanceof Boolean) {
             setArrowEnd(((Boolean)pd.parameter).booleanValue());
         } else {
             System.out.println("Warning: 2-unexpected parameter!"+pd);
         }
 
-        pd=(ParameterDescription)v.get(i++);
+        pd=v.get(i++);
         if (pd.parameter instanceof Float) {
             setArrowLength(((Float)pd.parameter).floatValue());
         } else {
             System.out.println("Warning: 3-unexpected parameter!"+pd);
         }
 
-        pd=(ParameterDescription)v.get(i++);
+        pd=v.get(i++);
         if (pd.parameter instanceof Float) {
             setArrowHalfWidth(((Float)pd.parameter).floatValue());
         } else {
             System.out.println("Warning: 4-unexpected parameter!"+pd);
         }
 
-        pd=(ParameterDescription)v.get(i++);
+        pd=v.get(i++);
         if (pd.parameter instanceof ArrowInfo) {
             setArrowStyle(((ArrowInfo)pd.parameter).style);
         } else {

@@ -46,6 +46,7 @@ public final class ToolbarZoom extends JToolBar implements ActionListener,
                                                      ChangeZoomListener,
                                                      ChangeCoordinatesListener
 {
+    private static final long serialVersionUID = 1L;
     private final JComboBox<String> zoom;
     private final JToggleButton showGrid;
     private final JToggleButton snapGrid;
@@ -301,8 +302,8 @@ public final class ToolbarZoom extends JToolBar implements ActionListener,
         float xum=x*127;
         float yum=y*127;
 
-        float xmm=(float)xum/1000;
-        float ymm=(float)yum/1000;
+        float xmm=xum/1000;
+        float ymm=yum/1000;
 
         Color c1=UIManager.getColor("Label.foreground");
         Color c2=UIManager.getColor("Label.background");

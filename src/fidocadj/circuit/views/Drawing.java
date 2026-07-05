@@ -148,7 +148,7 @@ public class Drawing
                     // We will process only primitive which require holes (pads
                     // as well as macros containing pads).
 
-                    gg = (GraphicPrimitive)drawingModel.getPrimitiveVector()
+                    gg = drawingModel.getPrimitiveVector()
                                                                 .get(i_index);
                     if (gg.needsHoles()) {
                         gg.setDrawOnlyPads(true);

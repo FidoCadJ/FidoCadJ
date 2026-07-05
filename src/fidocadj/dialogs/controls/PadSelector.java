@@ -33,6 +33,7 @@ import java.awt.*;
  */
 public final class PadSelector extends JPanel
 {
+    private static final long serialVersionUID = 1L;
 
     private final JRadioButton radioButton1;
     private final JRadioButton radioButton2;

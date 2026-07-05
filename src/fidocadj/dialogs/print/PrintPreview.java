@@ -39,6 +39,7 @@ import fidocadj.PrintTools;
 public final class PrintPreview extends CircuitPanel
     implements ComponentListener
 {
+    private static final long serialVersionUID = 1L;
     private final PageFormat pageDescription;
     private double topMargin;
     private double bottomMargin;
@@ -72,7 +73,7 @@ public final class PrintPreview extends CircuitPanel
         printObject.associateToCircuitPanel(this);
         printObject.setShowMargins(true);
 
-        Graphics2D g2=(Graphics2D)pageImage.createGraphics();
+        Graphics2D g2=pageImage.createGraphics();
         g2.setColor(Color.white);
         g2.fillRect(0,0,width,height);
         g2.scale(1.0/160,1.0/160);
@@ -126,7 +127,7 @@ public final class PrintPreview extends CircuitPanel
     {
         pageImage = new BufferedImage(10, 10,
             BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2=(Graphics2D)pageImage.createGraphics();
+        Graphics2D g2=pageImage.createGraphics();
 
         try {
             if (printObject.print(g2, pageDescription, p)
@@ -163,9 +164,9 @@ public final class PrintPreview extends CircuitPanel
 
         if(dialog.getLandscape()) {
             baseline=getWidth()*0.8;
-            pageDescription.setOrientation(pageDescription.LANDSCAPE);
+            pageDescription.setOrientation(PageFormat.LANDSCAPE);
         } else {
-            pageDescription.setOrientation(pageDescription.PORTRAIT);
+            pageDescription.setOrientation(PageFormat.PORTRAIT);
         }
         // Draw the background.
         g2d.setColor(getBackground());
@@ -218,9 +219,9 @@ public final class PrintPreview extends CircuitPanel
 
         if(dialog.getLandscape()) {
             baseline=getWidth()*0.8;
-            pageDescription.setOrientation(pageDescription.LANDSCAPE);
+            pageDescription.setOrientation(PageFormat.LANDSCAPE);
         } else {
-            pageDescription.setOrientation(pageDescription.PORTRAIT);
+            pageDescription.setOrientation(PageFormat.PORTRAIT);
         }
 
         int width=(int)baseline;
@@ -235,7 +236,7 @@ public final class PrintPreview extends CircuitPanel
 
         pageImage = new BufferedImage(width, height,
             BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d=(Graphics2D)pageImage.createGraphics();
+        Graphics2D g2d=pageImage.createGraphics();
         AffineTransform oldTransform = g2d.getTransform();
 
         // Activate anti-aliasing
@@ -267,7 +268,7 @@ public final class PrintPreview extends CircuitPanel
         int numpages=0;
         pageImage = new BufferedImage(10, 10,
             BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2=(Graphics2D)pageImage.createGraphics();
+        Graphics2D g2=pageImage.createGraphics();
 
         try {
             while(printObject.print(g2, pageDescription, numpages)

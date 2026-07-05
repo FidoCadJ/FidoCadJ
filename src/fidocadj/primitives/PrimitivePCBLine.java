@@ -241,7 +241,7 @@ public final class PrimitivePCBLine extends GraphicPrimitive
         int i=super.setControls(v);
         ParameterDescription pd;
 
-        pd=(ParameterDescription)v.get(i);
+        pd=v.get(i);
         ++i;
         // Check, just for sure...
         if (pd.parameter instanceof Float) {

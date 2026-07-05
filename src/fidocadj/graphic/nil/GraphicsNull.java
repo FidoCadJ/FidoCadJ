@@ -212,7 +212,7 @@ public class GraphicsNull implements GraphicsInterface, TextInterface
             Font.PLAIN+(isItalic?Font.ITALIC:0)+(isBold?Font.BOLD:0), 100);
         Font f = ft.deriveFont(
             AffineTransform.getScaleInstance(
-                (double)size/100.0,(double)size/100.0));
+                size/100.0,size/100.0));
 
         fm=g.getFontMetrics(f);
     }

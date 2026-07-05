@@ -88,7 +88,7 @@ public final class Utf8ResourceBundle
         */
         @Override protected Object handleGetObject(String key)
         {
-            String value = (String)bundle.getString(key);
+            String value = bundle.getString(key);
             String version = System.getProperty("java.specification.version");
 
             // Things have changed starting from Java 9: the bundle.getString

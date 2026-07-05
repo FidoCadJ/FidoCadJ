@@ -22,6 +22,7 @@ import fidocadj.globals.OSValidator;
  */
 public final class SearchField extends JTextField implements FocusListener
 {
+    private static final long serialVersionUID = 1L;
 
     private static final Border CANCEL_BORDER = new CancelBorder();
     private boolean sendsNotificationForEachKeystroke = false;
@@ -187,6 +188,7 @@ public final class SearchField extends JTextField implements FocusListener
      */
     static class CancelBorder extends EmptyBorder
     {
+        private static final long serialVersionUID = 1L;
         private static final Color GRAY = new Color(0.7f, 0.7f, 0.7f);
 
         /** Standard constructor.
@@ -233,7 +235,9 @@ public final class SearchField extends JTextField implements FocusListener
 
             g.setColor(field.armed ? Color.GRAY : GRAY);
 
-            if (field.showingPlaceholderText || field.getText().length() == 0) {
+            if (SearchField.showingPlaceholderText
+                || field.getText().length() == 0)
+            {
                 return;
             }
 

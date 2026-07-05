@@ -89,7 +89,7 @@ public class UndoActions implements UndoActorListener
     */
     public void undo()
     {
-        UndoState r = (UndoState)um.undoPop();
+        UndoState r = um.undoPop();
 
         // Check if it is an operation involving libraries.
         if(um.isNextOperationOnALibrary() && libraryUndoListener!=null) {
@@ -110,7 +110,7 @@ public class UndoActions implements UndoActorListener
     */
     public void redo()
     {
-        UndoState r = (UndoState)um.undoRedo();
+        UndoState r = um.undoRedo();
         if(r.libraryOperation && libraryUndoListener!=null) {
             libraryUndoListener.undoLibrary(r.libraryDir);
         }

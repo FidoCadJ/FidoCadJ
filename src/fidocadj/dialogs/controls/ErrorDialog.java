@@ -29,6 +29,7 @@ import java.awt.datatransfer.StringSelection;
  */
 public class ErrorDialog extends MinimumSizeDialog
 {
+    private static final long serialVersionUID = 1L;
 
     // Static configuration for the dialog
     private static final int MIN_WIDTH = 450;
