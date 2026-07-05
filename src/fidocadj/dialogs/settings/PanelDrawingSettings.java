@@ -6,6 +6,7 @@ import java.awt.*;
 import fidocadj.dialogs.controls.DialogUtil;
 import fidocadj.dialogs.controls.TextPopupMenu;
 import fidocadj.globals.Globals;
+import fidocadj.globals.OSValidator;
 import fidocadj.globals.SettingsManager;
 
 /**
@@ -239,7 +240,8 @@ public class PanelDrawingSettings extends JPanel implements SettingsPanel
         shiftCPCheckBox.setSelected(
                 SettingsManager.get("SHIFT_CP", "false").equals("true"));
         zoomKeyCheckBox.setSelected(
-                SettingsManager.get("ZOOM_KEY", "false").equals("true"));
+                SettingsManager.get("ZOOM_KEY",
+                    String.valueOf(OSValidator.isMac())).equals("true"));
     }
 
     /**

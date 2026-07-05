@@ -450,7 +450,7 @@ public final class FidoFrame extends JFrame implements
         mc.setMagnitudes(z,z);
 
         circuitPanel.setEnableKeyForZoom(
-                SettingsManager.getBoolean("ZOOM_KEY", true));
+                SettingsManager.getBoolean("ZOOM_KEY", !OSValidator.isMac()));
     }
 
     /** Load the standard libraries according to the locale.
@@ -826,7 +826,7 @@ public final class FidoFrame extends JFrame implements
                     "CONNECTION_SIZE", Globals.diameterConnection);
 
         circuitPanel.setEnableKeyForZoom(
-                SettingsManager.getBoolean("ZOOM_KEY", true));
+                SettingsManager.getBoolean("ZOOM_KEY", !OSValidator.isMac()));
 
         if (!libDirectory.equals(oldDirectory)) {
             loadLibraries();
