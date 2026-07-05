@@ -78,6 +78,39 @@ public final class PrimitivePCBPad extends GraphicPrimitive
         return N_POINTS;
     }
 
+    /** Gets the width of the pad.
+        @return the width, in logical units.
+    */
+    public float getPadWidth()
+    {
+        return rx;
+    }
+
+    /** Gets the height of the pad.
+        @return the height, in logical units.
+    */
+    public float getPadHeight()
+    {
+        return ry;
+    }
+
+    /** Gets the diameter of the internal drill hole.
+        @return the diameter, in logical units.
+    */
+    public float getPadDrill()
+    {
+        return ri;
+    }
+
+    /** Gets the style of the pad.
+        @return the style code (0: oval, 1: rectangular, 2: rectangular
+            with rounded corners).
+    */
+    public int getPadStyle()
+    {
+        return sty;
+    }
+
     /** Create a PCB pad
         @param x1 the x coordinate (logical unit).
         @param y1 the y coordinate (logical unit).

@@ -42,6 +42,7 @@ public class PanelPCBSettings extends JPanel implements SettingsPanel
     private JTextField pcbPadWidthField;
     private JTextField pcbPadHeightField;
     private JTextField pcbPadHoleDiameterField;
+    private JCheckBox rememberLastPadCheckBox;
 
     /**
      Constructor for PanelPCBSettings.
@@ -133,8 +134,16 @@ public class PanelPCBSettings extends JPanel implements SettingsPanel
                 new Insets(15, 5, 5, 10));
         add(pcbPadHoleDiameterField, constraints);
 
+        // Checkbox to remember the characteristics of the last PCB pad
+        rememberLastPadCheckBox = new JCheckBox(
+                Globals.messages.getString("Remember_last_pad"));
+        constraints = DialogUtil.createConst(1, 4, 1, 1, 0.01, 0.01,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(15, 5, 5, 10));
+        add(rememberLastPadCheckBox, constraints);
+
         // Spacer to push all components to the top
-        constraints = DialogUtil.createConst(0, 4, 2, 1, 1.0, 1.0,
+        constraints = DialogUtil.createConst(0, 5, 2, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0));
         add(Box.createGlue(), constraints);
@@ -151,6 +160,8 @@ public class PanelPCBSettings extends JPanel implements SettingsPanel
         pcbPadHeightField.setText(SettingsManager.get("PCB_PAD_HEIGHT", "10"));
         pcbPadHoleDiameterField.setText(SettingsManager.get(
                 "PCB_PAD_HOLE_DIAMETER", "5"));
+        rememberLastPadCheckBox.setSelected(SettingsManager.get(
+                "PCB_REMEMBER_LAST_PAD", "false").equals("true"));
     }
 
     /**
@@ -164,5 +175,7 @@ public class PanelPCBSettings extends JPanel implements SettingsPanel
         SettingsManager.put("PCB_PAD_HEIGHT", pcbPadHeightField.getText());
         SettingsManager.put("PCB_PAD_HOLE_DIAMETER",
                 pcbPadHoleDiameterField.getText());
+        SettingsManager.put("PCB_REMEMBER_LAST_PAD",
+                rememberLastPadCheckBox.isSelected() ? "true" : "false");
     }
 }

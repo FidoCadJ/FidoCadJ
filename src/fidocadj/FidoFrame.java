@@ -427,6 +427,20 @@ public final class FidoFrame extends JFrame implements
         ae.pcbThickness=Integer.parseInt(
                 SettingsManager.get("PCB_thickness","5"));
 
+        // If enabled, the characteristics of the last PCB pad which was
+        // placed or edited (persisted across sessions) take precedence
+        // over the fixed defaults above.
+        if (SettingsManager.getBoolean("PCB_REMEMBER_LAST_PAD", false)) {
+            ae.setPcbPadSizeX((float)SettingsManager.getDouble(
+                    "PCB_LAST_PAD_WIDTH", ae.getPcbPadSizeX()));
+            ae.setPcbPadSizeY((float)SettingsManager.getDouble(
+                    "PCB_LAST_PAD_HEIGHT", ae.getPcbPadSizeY()));
+            ae.setPcbPadDrill((float)SettingsManager.getDouble(
+                    "PCB_LAST_PAD_DRILL", ae.getPcbPadDrill()));
+            ae.setPcbPadStyle(SettingsManager.getInt(
+                    "PCB_LAST_PAD_STYLE", ae.getPcbPadStyle()));
+        }
+
         circuitPanel.setBackground(Color.decode(SettingsManager.get(
                 "BACKGROUND_COLOR", "#FFFFFF")));
 

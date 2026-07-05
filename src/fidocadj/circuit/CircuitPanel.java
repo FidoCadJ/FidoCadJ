@@ -11,6 +11,7 @@ import fidocadj.dialogs.controls.TypedParameter;
 import fidocadj.dialogs.controls.ParameterDescription;
 import fidocadj.dialogs.DialogParameters;
 import fidocadj.primitives.GraphicPrimitive;
+import fidocadj.primitives.PrimitivePCBPad;
 import fidocadj.timer.MyTimer;
 import fidocadj.toolbars.ChangeSelectionListener;
 import fidocadj.toolbars.ChangeZoomListener;
@@ -20,6 +21,7 @@ import fidocadj.circuit.controllers.EditorActions;
 import fidocadj.circuit.controllers.CopyPasteActions;
 import fidocadj.circuit.controllers.ParserActions;
 import fidocadj.circuit.controllers.UndoActions;
+import fidocadj.circuit.controllers.AddElements;
 import fidocadj.circuit.controllers.ContinuosMoveActions;
 import fidocadj.circuit.controllers.SelectionActions;
 import fidocadj.circuit.controllers.PrimitivesParInterface;
@@ -36,6 +38,7 @@ import fidocadj.geom.MapCoordinates;
 import fidocadj.geom.DrawingSize;
 import fidocadj.geom.ChangeCoordinatesListener;
 import fidocadj.globals.Globals;
+import fidocadj.globals.SettingsManager;
 import fidocadj.graphic.FontG;
 import fidocadj.primitives.PrimitiveAdvText;
 
@@ -1055,6 +1058,9 @@ public class CircuitPanel extends JPanel implements ChangeSelectedLayer,
         if (dp.active) {
             if (selectionActions.isUniquePrimitiveSelected()) {
                 gp.setControls(dp.getCharacteristics());
+                if (gp instanceof PrimitivePCBPad) {
+                    rememberLastPadIfEnabled((PrimitivePCBPad) gp);
+                }
             } else {
                 if (isMultipleTextSelected) {
                     java.util.Map<String, Object> updatedValues
@@ -1155,6 +1161,34 @@ public class CircuitPanel extends JPanel implements ChangeSelectedLayer,
             return true;
         }
         return false;
+    }
+
+    /** If the "remember last PAD" setting is enabled, store the given
+        pad's characteristics (width, height, drill diameter and style) as
+        the defaults for the next new pad to be inserted, both for the
+        current session and, persisted, for future ones.
+        @param pad the PCB pad whose characteristics should be remembered.
+    */
+    private void rememberLastPadIfEnabled(PrimitivePCBPad pad)
+    {
+        if (!SettingsManager.getBoolean("PCB_REMEMBER_LAST_PAD", false)) {
+            return;
+        }
+
+        AddElements ae = continuosMoveActions.getAddElements();
+        ae.setPcbPadSizeX(pad.getPadWidth());
+        ae.setPcbPadSizeY(pad.getPadHeight());
+        ae.setPcbPadDrill(pad.getPadDrill());
+        ae.setPcbPadStyle(pad.getPadStyle());
+
+        SettingsManager.put("PCB_LAST_PAD_WIDTH",
+            String.valueOf(pad.getPadWidth()));
+        SettingsManager.put("PCB_LAST_PAD_HEIGHT",
+            String.valueOf(pad.getPadHeight()));
+        SettingsManager.put("PCB_LAST_PAD_DRILL",
+            String.valueOf(pad.getPadDrill()));
+        SettingsManager.put("PCB_LAST_PAD_STYLE",
+            String.valueOf(pad.getPadStyle()));
     }
 
     /** Selects the closest object to the given point (in logical coordinates)
