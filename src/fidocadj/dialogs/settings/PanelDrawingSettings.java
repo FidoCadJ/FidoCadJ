@@ -47,6 +47,7 @@ public class PanelDrawingSettings extends JPanel implements SettingsPanel
     private JCheckBox shiftCPCheckBox;
     private JCheckBox profileCheckBox;
     private JCheckBox zoomKeyCheckBox;
+    private JCheckBox rulerEnableCheckBox;
 
     /**
      Constructor for PanelDrawingSettings.
@@ -192,8 +193,16 @@ public class PanelDrawingSettings extends JPanel implements SettingsPanel
                 new Insets(8, 6, 6, 6));
         add(zoomKeyCheckBox, constraints);
 
+        // Checkbox to enable/disable the measurement ruler
+        rulerEnableCheckBox = new JCheckBox(
+                Globals.messages.getString("Ruler_enable"));
+        constraints = DialogUtil.createConst(1, 9, 1, 1, 1.0, 0.0,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(8, 6, 6, 6));
+        add(rulerEnableCheckBox, constraints);
+
         // Spacer to push all components to the top
-        constraints = DialogUtil.createConst(0, 9, 2, 1, 1.0, 1.0,
+        constraints = DialogUtil.createConst(0, 10, 2, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0));
         add(Box.createGlue(), constraints);
@@ -242,6 +251,8 @@ public class PanelDrawingSettings extends JPanel implements SettingsPanel
         zoomKeyCheckBox.setSelected(
                 SettingsManager.get("ZOOM_KEY",
                     String.valueOf(OSValidator.isMac())).equals("true"));
+        rulerEnableCheckBox.setSelected(
+                SettingsManager.get("RULER_ENABLED", "true").equals("true"));
     }
 
     /**
@@ -266,5 +277,7 @@ public class PanelDrawingSettings extends JPanel implements SettingsPanel
                 shiftCPCheckBox.isSelected() ? "true" : "false");
         SettingsManager.put("ZOOM_KEY",
                 zoomKeyCheckBox.isSelected() ? "true" : "false");
+        SettingsManager.put("RULER_ENABLED",
+                rulerEnableCheckBox.isSelected() ? "true" : "false");
     }
 }

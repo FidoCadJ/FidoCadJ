@@ -148,7 +148,8 @@ public class MouseMoveClickHandler implements MouseMotionListener,
                     editorActions.getSelectionTolerance(),
                     toggle, circuitPanel.getMapCoordinates());
         } else if(continuosMoveActions.actionSelected ==
-                    ElementsEdtActions.SELECTION)
+                    ElementsEdtActions.SELECTION &&
+                    circuitPanel.isRulerEnabled())
         {
             // Right click during selection
             circuitPanel.getRuler().setActive(true);
@@ -185,8 +186,9 @@ public class MouseMoveClickHandler implements MouseMotionListener,
         // Handle the ruler. Basically, we just save the coordinates and
         // we launch a repaint which will be done as soon as possible.
         // No graphical elements are drawn outside a repaint.
-        if((evt.getModifiersEx() & InputEvent.BUTTON3_DOWN_MASK)!=0 ||
-            evt.isShiftDown())
+        if(circuitPanel.isRulerEnabled() &&
+            ((evt.getModifiersEx() & InputEvent.BUTTON3_DOWN_MASK)!=0 ||
+            evt.isShiftDown()))
         {
             circuitPanel.getRuler().setRulerEnd(px, py);
             circuitPanel.repaint();

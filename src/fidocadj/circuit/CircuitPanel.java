@@ -109,6 +109,10 @@ public class CircuitPanel extends JPanel implements ChangeSelectedLayer,
     // Use key for zoom
     private boolean enableKeyForZoom;
 
+    // Whether the measurement ruler (dragged with the right mouse button)
+    // is enabled.
+    private boolean rulerEnabled = true;
+
     public CircuitPanel()
     {
         this.ruler = null;
@@ -1380,5 +1384,24 @@ public class CircuitPanel extends JPanel implements ChangeSelectedLayer,
         if (mwHandler != null) {
             mwHandler.updateListenerState();
         }
+    }
+
+    /**
+     * @return true if the measurement ruler is enabled.
+     */
+    public boolean isRulerEnabled()
+    {
+        return rulerEnabled;
+    }
+
+    /**
+     * Sets whether the measurement ruler (dragged with the right mouse
+     * button) can be activated.
+     *
+     * @param rulerEnabled true to enable the ruler, false to disable it.
+     */
+    public void setRulerEnabled(boolean rulerEnabled)
+    {
+        this.rulerEnabled = rulerEnabled;
     }
 }
