@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import fidocadj.dialogs.controls.DialogUtil;
+import fidocadj.dialogs.controls.PadSelector;
 import fidocadj.dialogs.controls.TextPopupMenu;
 import fidocadj.globals.Globals;
 import fidocadj.globals.SettingsManager;
@@ -42,6 +43,7 @@ public class PanelPCBSettings extends JPanel implements SettingsPanel
     private JTextField pcbPadWidthField;
     private JTextField pcbPadHeightField;
     private JTextField pcbPadHoleDiameterField;
+    private PadSelector defaultPadStyleSelector;
     private JCheckBox rememberLastPadCheckBox;
 
     /**
@@ -134,16 +136,35 @@ public class PanelPCBSettings extends JPanel implements SettingsPanel
                 new Insets(15, 5, 5, 10));
         add(pcbPadHoleDiameterField, constraints);
 
+        // Label and selector for the default pad style. Only meaningful
+        // when "remember last pad" is off, since in that case the style
+        // comes from the last pad placed/edited instead.
+        JLabel defaultPadStyleLabel = new JLabel(Globals.messages.getString(
+                "ctrl_pad_style"));
+        constraints = DialogUtil.createConst(0, 4, 1, 1, 0.01, 0.01,
+                GridBagConstraints.EAST, GridBagConstraints.NONE,
+                new Insets(15, 10, 5, 5));
+        add(defaultPadStyleLabel, constraints);
+
+        defaultPadStyleSelector = new PadSelector(0);
+        constraints = DialogUtil.createConst(1, 4, 1, 1, 0.01, 0.01,
+                GridBagConstraints.WEST, GridBagConstraints.NONE,
+                new Insets(15, 5, 5, 10));
+        add(defaultPadStyleSelector, constraints);
+
         // Checkbox to remember the characteristics of the last PCB pad
         rememberLastPadCheckBox = new JCheckBox(
                 Globals.messages.getString("Remember_last_pad"));
-        constraints = DialogUtil.createConst(1, 4, 1, 1, 0.01, 0.01,
+        rememberLastPadCheckBox.addActionListener(e ->
+                defaultPadStyleSelector.setEnabled(
+                        !rememberLastPadCheckBox.isSelected()));
+        constraints = DialogUtil.createConst(1, 5, 1, 1, 0.01, 0.01,
                 GridBagConstraints.WEST, GridBagConstraints.NONE,
                 new Insets(15, 5, 5, 10));
         add(rememberLastPadCheckBox, constraints);
 
         // Spacer to push all components to the top
-        constraints = DialogUtil.createConst(0, 5, 2, 1, 1.0, 1.0,
+        constraints = DialogUtil.createConst(0, 6, 2, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                 new Insets(0, 0, 0, 0));
         add(Box.createGlue(), constraints);
@@ -160,8 +181,12 @@ public class PanelPCBSettings extends JPanel implements SettingsPanel
         pcbPadHeightField.setText(SettingsManager.get("PCB_PAD_HEIGHT", "10"));
         pcbPadHoleDiameterField.setText(SettingsManager.get(
                 "PCB_PAD_HOLE_DIAMETER", "5"));
+        defaultPadStyleSelector.setSelectedIndex(
+                SettingsManager.getInt("PCB_pad_style", 0));
         rememberLastPadCheckBox.setSelected(SettingsManager.get(
                 "PCB_REMEMBER_LAST_PAD", "false").equals("true"));
+        defaultPadStyleSelector.setEnabled(
+                !rememberLastPadCheckBox.isSelected());
     }
 
     /**
@@ -175,6 +200,8 @@ public class PanelPCBSettings extends JPanel implements SettingsPanel
         SettingsManager.put("PCB_PAD_HEIGHT", pcbPadHeightField.getText());
         SettingsManager.put("PCB_PAD_HOLE_DIAMETER",
                 pcbPadHoleDiameterField.getText());
+        SettingsManager.put("PCB_pad_style",
+                String.valueOf(defaultPadStyleSelector.getSelectedIndex()));
         SettingsManager.put("PCB_REMEMBER_LAST_PAD",
                 rememberLastPadCheckBox.isSelected() ? "true" : "false");
     }

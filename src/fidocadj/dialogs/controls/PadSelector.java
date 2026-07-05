@@ -111,6 +111,22 @@ public final class PadSelector extends JPanel
     }
 
     /**
+     Enables or disables the three radio buttons, so the selector as a
+     whole can be greyed out when its value is not going to be used
+     (e.g. when a "remember the last pad" option overrides it).
+
+     @param enabled true to enable the radio buttons, false to disable
+        them.
+     */
+    @Override public void setEnabled(boolean enabled)
+    {
+        super.setEnabled(enabled);
+        radioButton1.setEnabled(enabled);
+        radioButton2.setEnabled(enabled);
+        radioButton3.setEnabled(enabled);
+    }
+
+    /**
      Returns the index of the currently selected radio button.
 
      @return The index of the selected button
