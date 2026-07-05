@@ -529,7 +529,8 @@ public final class PrimitiveMacro extends GraphicPrimitive
         @param ix the x coordinate of the center of rotation
         @param iy the y coordinate of the center of rotation
     */
-    public void rotatePrimitive(boolean bCounterClockWise,int ix, int iy)
+    @Override public void rotatePrimitive(boolean bCounterClockWise,
+        float ix, float iy)
     {
         super.rotatePrimitive(bCounterClockWise, ix, iy);
 
@@ -547,7 +548,7 @@ public final class PrimitiveMacro extends GraphicPrimitive
         primitive, since we just need to toggle the mirror flag.
         @param xpos the x value of the pivot axis.
     */
-    public void mirrorPrimitive(int xpos)
+    @Override public void mirrorPrimitive(float xpos)
     {
         super.mirrorPrimitive(xpos);
         m ^= true;

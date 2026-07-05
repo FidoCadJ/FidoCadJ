@@ -350,7 +350,8 @@ public final class PrimitivePCBPad extends GraphicPrimitive
         @param ix the x coordinate of the rotation point.
         @param iy the y coordinate of the rotation point.
     */
-    public void rotatePrimitive(boolean bCounterClockWise, int ix, int iy)
+    @Override public void rotatePrimitive(boolean bCounterClockWise,
+        float ix, float iy)
     {
         super.rotatePrimitive(bCounterClockWise, ix, iy);
         float swap=rx;
