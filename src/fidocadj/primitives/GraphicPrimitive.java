@@ -391,13 +391,15 @@ public abstract class GraphicPrimitive
             }
 
             s2.append("TY ");
-            s2.append(virtualPoint[getNameVirtualPointNumber()].x);
+            s2.append(roundIntelligently(
+                virtualPoint[getNameVirtualPointNumber()].x));
             s2.append(" ");
-            s2.append(virtualPoint[getNameVirtualPointNumber()].y);
+            s2.append(roundIntelligently(
+                virtualPoint[getNameVirtualPointNumber()].y));
             s2.append(" ");
-            s2.append(macroFontSize*4/3);
+            s2.append(roundIntelligently(macroFontSize*4/3.0f));
             s2.append(" ");
-            s2.append(macroFontSize);
+            s2.append(roundIntelligently(macroFontSize));
             s2.append(" 0 0 ");
             s2.append(getLayer());
             s2.append(" ");
@@ -407,13 +409,15 @@ public abstract class GraphicPrimitive
             s2.append("\n");
 
             s2.append("TY ");
-            s2.append(virtualPoint[getValueVirtualPointNumber()].x);
+            s2.append(roundIntelligently(
+                virtualPoint[getValueVirtualPointNumber()].x));
             s2.append(" ");
-            s2.append(virtualPoint[getValueVirtualPointNumber()].y);
+            s2.append(roundIntelligently(
+                virtualPoint[getValueVirtualPointNumber()].y));
             s2.append(" ");
-            s2.append(macroFontSize*4/3);
+            s2.append(roundIntelligently(macroFontSize*4/3.0f));
             s2.append(" ");
-            s2.append(macroFontSize);
+            s2.append(roundIntelligently(macroFontSize));
             s2.append(" 0 0 ");
             s2.append(getLayer());
             s2.append(" ");
