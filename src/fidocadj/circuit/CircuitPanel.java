@@ -1097,6 +1097,23 @@ public class CircuitPanel extends JPanel implements ChangeSelectedLayer,
                                                 .getOriginalValue();
                                         // Fallback to the original value
                                     }
+                                } else if (originalParam.getOriginalValue()
+                                        instanceof Float)
+                                {
+                                    try {
+                                        finalValue = Float.parseFloat(
+                                                param.parameter.toString());
+                                        // Convert to Float
+                                    } catch (NumberFormatException e) {
+                                        // Handle the error if conversion fails
+                                        System.err.println(
+                                            "Failed to convert the value to "
+                                                + "Float: " +
+                                                 param.parameter);
+                                        finalValue = originalParam
+                                                .getOriginalValue();
+                                        // Fallback to the original value
+                                    }
                                 } else {
                                     // Keep the new value if no specific
                                     // conversion is required
@@ -1346,8 +1363,8 @@ public class CircuitPanel extends JPanel implements ChangeSelectedLayer,
             float rawDeltaX = minX < 0 ? -minX + MARGIN : MARGIN;
             float rawDeltaY = minY < 0 ? -minY + MARGIN : MARGIN;
 
-            float deltaX = ((rawDeltaX + gridStep - 1) / gridStep) * gridStep;
-            float deltaY = ((rawDeltaY + gridStep - 1) / gridStep) * gridStep;
+            float deltaX = (float) Math.ceil(rawDeltaX / gridStep) * gridStep;
+            float deltaY = (float) Math.ceil(rawDeltaY / gridStep) * gridStep;
 
             // Apply the translation to all primitives
             for (GraphicPrimitive gp : model.getPrimitiveVector()) {

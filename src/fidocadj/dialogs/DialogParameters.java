@@ -445,10 +445,10 @@ public final class DialogParameters extends JDialog
                             break;
                         }
                         if (pd.parameter instanceof PointG) {
-                            ((PointG) pd.parameter).x = Integer
-                                    .parseInt(jtf[tc++].getText());
-                            ((PointG) pd.parameter).y = Integer
-                                    .parseInt(jtf[tc++].getText());
+                            ((PointG) pd.parameter).x = Float
+                                    .parseFloat(jtf[tc++].getText());
+                            ((PointG) pd.parameter).y = Float
+                                    .parseFloat(jtf[tc++].getText());
                         } else if (pd.parameter instanceof String) {
                             pd.parameter = jtf[tc++].getText();
                         } else if (pd.parameter instanceof Boolean) {
