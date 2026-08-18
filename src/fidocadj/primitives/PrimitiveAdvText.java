@@ -320,9 +320,8 @@ public final class PrimitiveAdvText extends GraphicPrimitive
 
             virtualPoint[0].x = Float.parseFloat(tokens[1]);
             virtualPoint[0].y = Float.parseFloat(tokens[2]);
-            // We may accept non-integer data in the future.
-            siy = (int) Math.round(Double.parseDouble(tokens[3]));
-            six = (int) Math.round(Double.parseDouble(tokens[4]));
+            siy = Float.parseFloat(tokens[3]);
+            six = Float.parseFloat(tokens[4]);
             checkSizes();
             o = Integer.parseInt(tokens[5]);
             sty = Integer.parseInt(tokens[6]);
@@ -609,7 +608,14 @@ public final class PrimitiveAdvText extends GraphicPrimitive
                 if (param instanceof LayerInfo) {
                     setLayer(((LayerInfo) param).getLayer());
                 } else {
-                    if (param instanceof Integer) {
+                    if (param instanceof Float) {
+                        switch (i) {
+                            case 2 ->
+                                six = (Float) param;
+                            case 3 ->
+                                siy = (Float) param;
+                        }
+                    } else if (param instanceof Integer) {
                         switch (i) {
                             case 2 ->
                                 six = (Integer) param;
