@@ -488,8 +488,8 @@ public final class PrimitiveAdvText extends GraphicPrimitive
                 // superscript -- whose glyphs are shifted well outside the
                 // plain ascent/descent box -- is still covered (#197).
                 int perpExtent = bottomSCI-topSCI;
-                double ox = xaSCI + topSCI * si;
-                double oy = yaSCI + topSCI * co;
+                double ox = xaSCI + (hSCI + topSCI) * si;
+                double oy = yaSCI + (hSCI + topSCI) * co;
 
                 xpSCI = new int[4];
                 ypSCI = new int[4];
