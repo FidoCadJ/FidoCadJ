@@ -673,7 +673,7 @@ public final class PrimitiveMacro extends GraphicPrimitive
             cs.mapX(virtualPoint[2].x, virtualPoint[2].y),
             cs.mapY(virtualPoint[2].x, virtualPoint[2].y),
             macroFont,
-            (int)(cs.mapYr(getMacroFontSize(),getMacroFontSize())-
+            (int)Math.round(cs.mapYr(getMacroFontSize(),getMacroFontSize())-
                 cs.mapYr(0,0)),
             library))
         {

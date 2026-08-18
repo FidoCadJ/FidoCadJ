@@ -451,7 +451,8 @@ public final class PrimitivePCBPad extends GraphicPrimitive
                        Math.abs(cs.mapY(virtualPoint[0].x+rx,
                             virtualPoint[0].y+ry)-
                        cs.mapY(virtualPoint[0].x,virtualPoint[0].y)),
-                       (int)(ri*cs.getXMagnitude()), getLayer(),drawOnlyPads);
+                       (int)Math.round(ri*cs.getXMagnitude()),
+                       getLayer(),drawOnlyPads);
     }
     /** Get the number of the virtual point associated to the Name property
         @return the number of the virtual point associated to the Name property

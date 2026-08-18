@@ -436,15 +436,17 @@ public final class PrimitiveLine extends GraphicPrimitive
         throws IOException
     {
         exportText(exp, cs, -1);
-        exp.exportLine(cs.mapX(virtualPoint[0].x,virtualPoint[0].y),
-                       cs.mapY(virtualPoint[0].x,virtualPoint[0].y),
-                       cs.mapX(virtualPoint[1].x,virtualPoint[1].y),
-                       cs.mapY(virtualPoint[1].x,virtualPoint[1].y),
+        exp.exportLine(cs.mapXr(virtualPoint[0].x,virtualPoint[0].y),
+                       cs.mapYr(virtualPoint[0].x,virtualPoint[0].y),
+                       cs.mapXr(virtualPoint[1].x,virtualPoint[1].y),
+                       cs.mapYr(virtualPoint[1].x,virtualPoint[1].y),
                        getLayer(),
                        arrowData.isArrowStart(), arrowData.isArrowEnd(),
                        arrowData.getArrowStyle(),
-                       (int)(arrowData.getArrowLength()*cs.getXMagnitude()),
-                       (int)(arrowData.getArrowHalfWidth()*cs.getXMagnitude()),
+                       (int)Math.round(arrowData.getArrowLength()
+                           *cs.getXMagnitude()),
+                       (int)Math.round(arrowData.getArrowHalfWidth()
+                           *cs.getXMagnitude()),
                        dashStyle,
                        Globals.lineWidth*cs.getXMagnitude());
     }

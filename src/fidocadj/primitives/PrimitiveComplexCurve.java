@@ -1019,8 +1019,10 @@ public final class PrimitiveComplexCurve
         if (!exp.exportCurve(vertices, nPoints, isFilled, isClosed, getLayer(),
                 arrowData.isArrowStart(), arrowData.isArrowEnd(),
                 arrowData.getArrowStyle(),
-                (int)(arrowData.getArrowLength()*cs.getXMagnitude()),
-                (int)(arrowData.getArrowHalfWidth()*cs.getXMagnitude()),
+                (int)Math.round(arrowData.getArrowLength()
+                    *cs.getXMagnitude()),
+                (int)Math.round(arrowData.getArrowHalfWidth()
+                    *cs.getXMagnitude()),
                 dashStyle, Globals.lineWidth*cs.getXMagnitude()))
         {
             exportAsPolygonInterface(xPoints, yPoints, vertices, exp, cs);
@@ -1031,8 +1033,8 @@ public final class PrimitiveComplexCurve
             if(q.getNpoints()>2) {
                 if (arrowData.isArrowStart()&&!isClosed) {
                     exp.exportArrow(
-                        cs.mapX(virtualPoint[0].x,virtualPoint[0].y),
-                        cs.mapY(virtualPoint[0].x,virtualPoint[0].y),
+                        cs.mapXr(virtualPoint[0].x,virtualPoint[0].y),
+                        cs.mapYr(virtualPoint[0].x,virtualPoint[0].y),
                         vertices[1].x, vertices[1].y,
                         arrowData.getArrowLength()*cs.getXMagnitude(),
                         arrowData.getArrowHalfWidth()*cs.getXMagnitude(),
@@ -1041,8 +1043,8 @@ public final class PrimitiveComplexCurve
                 if (arrowData.isArrowEnd()&&!isClosed) {
                     int l=nPoints-1;
                     exp.exportArrow(
-                        cs.mapX(virtualPoint[l].x,virtualPoint[l].y),
-                        cs.mapY(virtualPoint[l].x,virtualPoint[l].y),
+                        cs.mapXr(virtualPoint[l].x,virtualPoint[l].y),
+                        cs.mapYr(virtualPoint[l].x,virtualPoint[l].y),
                         vertices[totalnP-2].x, vertices[totalnP-2].y,
                         arrowData.getArrowLength()*cs.getXMagnitude(),
                         arrowData.getArrowHalfWidth()*cs.getXMagnitude(),

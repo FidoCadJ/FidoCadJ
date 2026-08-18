@@ -569,8 +569,8 @@ public final class PrimitivePolygon extends GraphicPrimitive
 
         for(int i=0; i<nPoints;++i){
             vertices[i]=new PointDouble();
-            vertices[i].x=cs.mapX(virtualPoint[i].x,virtualPoint[i].y);
-            vertices[i].y=cs.mapY(virtualPoint[i].x,virtualPoint[i].y);
+            vertices[i].x=cs.mapXr(virtualPoint[i].x,virtualPoint[i].y);
+            vertices[i].y=cs.mapYr(virtualPoint[i].x,virtualPoint[i].y);
         }
 
         exp.exportPolygon(vertices, nPoints, isFilled, getLayer(), dashStyle,

@@ -104,7 +104,7 @@ public final class ExportFidoCad implements ExportInterface
     */
     private int cLe(double l)
     {
-        return (int)l;
+        return (int)Math.round(l);
     }
 
     /** Constructor
