@@ -124,7 +124,7 @@ public class HandleActions
         float dy = cs.unmapYsnap(py) - oldpy;
 
         oldpx = cs.unmapXsnap(px);
-        oldpy = cs.unmapXsnap(py);
+        oldpy = cs.unmapYsnap(py);
 
         if (dx == 0 && dy == 0) {
             return;
@@ -191,7 +191,7 @@ public class HandleActions
         List<LayerDesc> layerV=drawingModel.getLayers();
 
         oldpx=cs.unmapXnosnap(px);
-        oldpy=cs.unmapXnosnap(py);
+        oldpy=cs.unmapYnosnap(py);
 
         firstDrag=true;
 
@@ -245,11 +245,11 @@ public class HandleActions
             handleBeingDragged=GraphicPrimitive.DRAG_PRIMITIVE;
             firstDrag=true;
             oldpx=cs.unmapXsnap(px);
-            oldpy=cs.unmapXsnap(py);
+            oldpy=cs.unmapYsnap(py);
         } else if (handleBeingDragged<0) {
             // We want to select things in a rectangular area
             oldpx=cs.unmapXsnap(px);
-            oldpy=cs.unmapXsnap(py);
+            oldpy=cs.unmapYsnap(py);
             handleBeingDragged=GraphicPrimitive.RECT_SELECTION;
         }
     }
