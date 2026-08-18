@@ -239,7 +239,10 @@ public final class PrimitiveAdvText extends GraphicPrimitive
             xyfactor = 1.0;
             needsStretching = false;
 
-            if (siy / six != 10 / 7) {
+            // The truncated integer comparison is intentional: it matches
+            // the historic int-division behavior and the exporters, so the
+            // natural font aspect is kept for ratios between 1 and 2.
+            if ((int) (siy / six) != 10 / 7) {
                 // Create a transformation for the font.
                 xyfactor = (double) siy / (double) six * 22.0 / 40.0;
                 needsStretching = true;
@@ -454,7 +457,8 @@ public final class PrimitiveAdvText extends GraphicPrimitive
 
             orientationSCI = o;
 
-            if (siy / six != 10 / 7) {
+            // Same intentional truncated integer comparison as in draw().
+            if ((int) (siy / six) != 10 / 7) {
                 double scaleFactor = (double) siy * 22.0 / 40.0
                         / (double) six;
                 hSCI = (int) Math.round(hSCI * scaleFactor);
@@ -864,7 +868,7 @@ public final class PrimitiveAdvText extends GraphicPrimitive
         float minX = Math.min(Math.min(x1, x2), Math.min(x3, x4));
         float minY = Math.min(Math.min(y1, y2), Math.min(y3, y4));
         float maxX = Math.max(Math.max(x1, x2), Math.max(x3, x4));
-        float maxY = Math.max(Math.max(y1, y2), Math.min(y3, y4));
+        float maxY = Math.max(Math.max(y1, y2), Math.max(y3, y4));
 
         RectangleG boundingBox = new RectangleG(
             minX, minY, 
