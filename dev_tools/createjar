@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 cd bin
 jar cvfm fidocadj.jar ../jar/Manifest.txt * **/*
 

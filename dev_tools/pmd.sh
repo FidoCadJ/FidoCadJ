@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ "$1" = "" ]; then
   echo "You should specify the command to run pmd as the first argument."
