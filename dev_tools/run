@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # cd bin
 # Testing with my old 1.4.2 JRE
 #/System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Commands/java -classpath "./bin:./jar:./jar/quaqua.jar:./jar/"  FidoFrame

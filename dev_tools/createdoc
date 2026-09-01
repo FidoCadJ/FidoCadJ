@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 javadoc -overview src/overview.html -public -d doc -sourcepath src -subpackages .
 
